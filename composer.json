@@ -1,0 +1,26 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "mmt/laravel-trading-service-sdk",
+    "type": "library",
+    "description": "Laravel SDK for interacting with the MMT Trading Service.",
+    "keywords": ["mmt", "laravel", "trading", "sdk"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "guzzlehttp/guzzle": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mmt\\TradingServiceSdk\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mmt\\TradingServiceSdk\\TradingServiceSdkServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
