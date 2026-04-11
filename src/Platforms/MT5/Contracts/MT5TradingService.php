@@ -3,12 +3,18 @@
 namespace Mmt\TradingServiceSdk\Platforms\MT5\Contracts;
 
 use Mmt\TradingServiceSdk\Contracts\CommandInterface;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ChangePasswordCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CheckPasswordCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
-use Mmt\TradingServiceSdk\Platforms\MT5\Contracts\MT5TradingServiceInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportPacket;
-
 
 class MT5TradingService implements MT5TradingServiceInterface
 {
@@ -19,7 +25,6 @@ class MT5TradingService implements MT5TradingServiceInterface
         private readonly TransportInterface $transport
     ) {}
 
-
     /**
      * @param ?ListSymbolsCommand $command
      * @return ResponseResult<string[]>
@@ -27,15 +32,17 @@ class MT5TradingService implements MT5TradingServiceInterface
     public function getSymbolCategories(?CommandInterface $command = null): ResponseResult
     {
         $url = $this->url.'/'.$this->connectionId.'/symbol-categories';
+
         return $this->sendPacket('get', $url, $command?->toArray() ?? []);
     }
 
     public function listGroups(): ResponseResult
     {
         $url = $this->url.'/'.$this->connectionId.'/groups';
+
         return $this->sendPacket('get', $url);
     }
-    
+
     public function createUser(CommandInterface $command): ResponseResult
     {
         return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users', $command->toArray());
@@ -61,19 +68,76 @@ class MT5TradingService implements MT5TradingServiceInterface
         return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/users', $command?->toArray() ?? []);
     }
 
-    public function getMarginLevel(): ResponseResult
+    /**
+     * @param GetMarginLevelCommand $command
+     * @return ResponseResult<MarginLevelItem>
+     */
+    public function getMarginLevel(CommandInterface $command): ResponseResult
     {
-        return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/margin-level');
+        $login = $this->encodePathSegment($command->login);
+        $url = $this->url.'/'.$this->connectionId.'/users/'.$login.'/margin';
+
+        return $this->sendPacket('get', $url, $command->toArray());
     }
 
-    private function sendPacket(string $method, string $url, array $payload = []): ResponseResult
+    public function getUser(string $login): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/users/'.$this->encodePathSegment($login);
+
+        return $this->sendPacket('get', $url);
+    }
+
+    public function updateUser(UpdateUserCommand $command): ResponseResult
+    {
+        return $this->sendPacket('patch', $this->url.'/'.$this->connectionId.'/users', $command->toArray());
+    }
+
+    public function changePassword(ChangePasswordCommand $command): ResponseResult
+    {
+        return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users/change-password', $command->toArray());
+    }
+
+    public function checkPassword(CheckPasswordCommand $command): ResponseResult
+    {
+        return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users/check-password', $command->toArray());
+    }
+
+    public function getMarginLevels(GetMarginLevelsCommand $command): ResponseResult
+    {
+        return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users/margins', $command->toArray());
+    }
+
+    public function getMarginLevelsByOpenPositions(): ResponseResult
+    {
+        return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/users/margins-by-open-positions');
+    }
+
+    public function getAccountState(string $login): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/users/'.$this->encodePathSegment($login).'/account-state';
+
+        return $this->sendPacket('get', $url);
+    }
+
+    public function setUserAccess(SetUserAccessCommand $command): ResponseResult
+    {
+        return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users/access', $command->toArray());
+    }
+
+    private function encodePathSegment(string $value): string
+    {
+        return rawurlencode($value);
+    }
+
+    /**
+     * @param array<string, mixed> $metadata
+     */
+    private function sendPacket(string $method, string $url, array $payload = [], array $metadata = []): ResponseResult
     {
         $packet = new TransportPacket(
             endpoint: $url,
             payload: $payload,
-            metadata: [
-                'method' => $method,
-            ],
+            metadata: array_merge(['method' => $method], $metadata),
         );
 
         return $this->transport->send($packet);

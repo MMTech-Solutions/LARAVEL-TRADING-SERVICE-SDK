@@ -5,12 +5,14 @@ namespace Mmt\TradingServiceSdk\Platforms\MT5\Contracts;
 use Mmt\TradingServiceSdk\Contracts\CommandInterface;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PositionItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\ServerTime;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\SymbolItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\UserItem;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\GroupItem;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
 
 interface MT5TradingServiceInterface
 {
@@ -53,5 +55,9 @@ interface MT5TradingServiceInterface
      */
     public function listUsers(?CommandInterface $command = null): ResponseResult;
 
-    public function getMarginLevel(): ResponseResult;
+    /**
+     * @param GetMarginLevelCommand $command
+     * @return ResponseResult<MarginLevelItem>
+     */
+    public function getMarginLevel(CommandInterface $command): ResponseResult;
 }
