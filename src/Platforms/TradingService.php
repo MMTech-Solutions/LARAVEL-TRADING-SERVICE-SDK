@@ -3,9 +3,10 @@
 namespace Mmt\TradingServiceSdk\Platforms;
 
 use Mmt\TradingServiceSdk\Platforms\Shared\ObjectResponses\BrokerConnectionResponse;
+use Mmt\TradingServiceSdk\Session\BrokerSession;
+use Mmt\TradingServiceSdk\Session\BrokerSessionInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
 use Mmt\TradingServiceSdk\Platforms\Shared\Commands\ConnectBrokerCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Contracts\MT5TradingServiceInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportPacket;
 
@@ -13,14 +14,37 @@ class TradingService
 {
     public function __construct(
         private readonly TransportInterface $transport,
-        private readonly MT5TradingServiceInterface $mt5TradingService,
     ) {}
+
+    public function connect(ConnectBrokerCommand $command, ?string &$connectionId = null): BrokerSessionInterface
+    {
+        $response = $this->createConnectionId($command);
+
+        if( !$response->isSuccess() ) {
+            throw new \Exception('Failed to create connection');
+        }
+
+        $data = $response->getData();
+
+        $connectionId = $data->connection_id;
+
+        return new BrokerSession(
+            connectionId: $connectionId
+        );
+    }
+
+    public function fromConnectionId(string $connectionId): BrokerSessionInterface
+    {
+        return new BrokerSession(
+            connectionId: $connectionId
+        );
+    }
 
     /**
      * @param ConnectBrokerCommand $command
      * @return ResponseResult<BrokerConnectionResponse>
      */
-    public function createConnectionId(ConnectBrokerCommand $command): ResponseResult
+    private function createConnectionId(ConnectBrokerCommand $command): ResponseResult
     {
         $packet = new TransportPacket(
             endpoint: '/v1/admin/brokers/connect',
@@ -31,10 +55,5 @@ class TradingService
         );
 
         return $this->transport->send($packet);
-    }
-
-    public function mt5(): MT5TradingServiceInterface
-    {
-        return $this->mt5TradingService;
     }
 }

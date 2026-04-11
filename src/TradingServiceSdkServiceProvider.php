@@ -19,7 +19,7 @@ class TradingServiceSdkServiceProvider extends ServiceProvider
         );
         
         $this->app->singleton(TransportInterface::class, TradingServiceHttpClient::class);
-        $this->app->singleton(MT5TradingServiceInterface::class, MT5TradingService::class);
+        $this->app->bind(MT5TradingServiceInterface::class, MT5TradingService::class);
         $this->app->singleton(TradingService::class);
     }
 

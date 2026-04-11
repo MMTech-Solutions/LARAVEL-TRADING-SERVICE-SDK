@@ -3,13 +3,14 @@
 namespace Mmt\TradingServiceSdk\Platforms\Shared\Commands;
 
 use Mmt\TradingServiceSdk\Contracts\CommandInterface;
+use Mmt\TradingServiceSdk\Enums\PlatformEnum;
 
 class ConnectBrokerCommand implements CommandInterface
 {
     public function __construct(
         public readonly string $server,
         public readonly int $port,
-        public readonly string $platform_type,
+        public readonly PlatformEnum $platform_type,
         public readonly string $login,
         public readonly string $password,
         public readonly string $name,
@@ -38,7 +39,7 @@ class ConnectBrokerCommand implements CommandInterface
         return [
             'server' => $this->server,
             'port' => $this->port,
-            'platform_type' => $this->platform_type,
+            'platform_type' => $this->platform_type->name,
             'login' => $this->login,
             'password' => $this->password,
             'name' => $this->name,

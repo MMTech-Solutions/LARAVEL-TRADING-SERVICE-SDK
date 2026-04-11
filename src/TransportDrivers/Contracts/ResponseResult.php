@@ -14,7 +14,8 @@ class ResponseResult
          */
         private readonly bool $success,
         private readonly mixed $data = null,
-        private readonly ?string $message = null
+        private readonly ?string $message = null,
+        private readonly mixed $errorDetails = null
     ) {}
 
     public function getCode(): string
@@ -38,5 +39,10 @@ class ResponseResult
     public function isSuccess(): bool
     {
         return $this->success;
+    }
+
+    public function getErrorDetails(): mixed
+    {
+        return $this->errorDetails;
     }
 }

@@ -3,9 +3,8 @@
 namespace Mmt\TradingServiceSdk\TransportDrivers\Drivers\Http;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
-use Illuminate\Support\Str;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
 use Mmt\TradingServiceSdk\Exceptions\TradingServiceRequestException;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportInterface;
@@ -49,10 +48,12 @@ class TradingServiceHttpClient implements TransportInterface
             $options = $query ? ['query' => $query] : [];
             $response = $this->http->get($uri, $options);
 
-            $data = $this->decode($response->getBody()->getContents());
+            $objectResponse = $this->decode($response->getBody()->getContents());
+
+            $data = $objectResponse->data;
 
             return new ResponseResult(
-                code: $data->code,
+                code: (string)$data->code,
                 message: $data->message,
                 data: $data->data,
                 success:true,
@@ -82,30 +83,31 @@ class TradingServiceHttpClient implements TransportInterface
     private function post(string $uri, array $data = []): ResponseResult
     {
         try {
-            // if(Str::endsWith($uri, '/users')) {
-            //     dd(json_encode($data));
-            // }
             $response = $this->http->post($uri, ['json' => $data]);
 
-            $data = $this->decode($response->getBody()->getContents());
+            $objectResponse = $this->decode($response->getBody()->getContents());
+
+            $data = $objectResponse->data;
 
             return new ResponseResult(
-                code: $data->code,
+                code: (string)$data->code,
                 message: $data->message,
                 data: $data->data,
                 success: true,
             );
             
-        } catch (RequestException $e) {
+        } catch (RequestException|ClientException $e) {
 
             $body = $e->getResponse()->getBody();
             $data = $body ? $this->decode($body->getContents()) : (object)[];
-            
+
             return new ResponseResult(
-                code: ((string)$data->code ?? '500'),
-                message: $data->message,
+                code: (string)$data->code,
+                message: $data?->message,
                 success: false,
+                errorDetails: $data?->detail ?? null,
             );
+
         } catch (Throwable $e) {
             return new ResponseResult(
                 code: 500,
@@ -121,6 +123,15 @@ class TradingServiceHttpClient implements TransportInterface
             return (object)[];
         }
 
-        return json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+        return new class (json_decode($body, false, 512, JSON_THROW_ON_ERROR)) {
+            public function __construct(
+                public readonly ?object $data,
+            ) {}
+
+            public function __get(string $name): mixed
+            {
+                return $this->data?->$name ?? null;
+            }
+        };
     }
 }
