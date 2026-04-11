@@ -5,11 +5,15 @@ namespace Mmt\TradingServiceSdk\Platforms\MT5\Contracts;
 use Mmt\TradingServiceSdk\Contracts\CommandInterface;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ChangePasswordCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CheckPasswordCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CloseAllPositionsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ClosePositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ExecutePositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
@@ -20,6 +24,12 @@ use InvalidArgumentException;
 
 class MT5TradingService implements MT5TradingServiceInterface
 {
+    private const TIMEOUT_EXECUTE_POSITION = 70.0;
+
+    private const TIMEOUT_CLOSE_ALL_POSITIONS = 125.0;
+
+    private const TIMEOUT_GET_POSITIONS = 35.0;
+
     private string $url = '/v1/mt5/connections';
 
     public function __construct(
@@ -106,6 +116,69 @@ class MT5TradingService implements MT5TradingServiceInterface
     public function getAllPositions(): ResponseResult
     {
         return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/positions/all');
+    }
+
+    public function executePosition(CommandInterface $command): ResponseResult
+    {
+        if (! $command instanceof ExecutePositionCommand) {
+            throw new InvalidArgumentException('Expected '.ExecutePositionCommand::class);
+        }
+
+        return $this->sendPacket(
+            'post',
+            $this->url.'/'.$this->connectionId.'/positions/execute',
+            $command->toArray(),
+            ['timeout' => self::TIMEOUT_EXECUTE_POSITION]
+        );
+    }
+
+    public function modifyPosition(CommandInterface $command): ResponseResult
+    {
+        if (! $command instanceof ModifyPositionCommand) {
+            throw new InvalidArgumentException('Expected '.ModifyPositionCommand::class);
+        }
+
+        return $this->sendPacket('patch', $this->url.'/'.$this->connectionId.'/positions', $command->toArray());
+    }
+
+    public function closePosition(CommandInterface $command): ResponseResult
+    {
+        if (! $command instanceof ClosePositionCommand) {
+            throw new InvalidArgumentException('Expected '.ClosePositionCommand::class);
+        }
+
+        return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/positions/close', $command->toArray());
+    }
+
+    public function closeAllPositions(CommandInterface $command): ResponseResult
+    {
+        if (! $command instanceof CloseAllPositionsCommand) {
+            throw new InvalidArgumentException('Expected '.CloseAllPositionsCommand::class);
+        }
+
+        return $this->sendPacket(
+            'post',
+            $this->url.'/'.$this->connectionId.'/positions/close-all',
+            $command->toArray(),
+            ['timeout' => self::TIMEOUT_CLOSE_ALL_POSITIONS]
+        );
+    }
+
+    public function getPositions(string $login): ResponseResult
+    {
+        return $this->sendPacket(
+            'get',
+            $this->url.'/'.$this->connectionId.'/positions',
+            ['login' => $login],
+            ['timeout' => self::TIMEOUT_GET_POSITIONS]
+        );
+    }
+
+    public function getPosition(string $entityId): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/positions/'.$this->encodePathSegment($entityId);
+
+        return $this->sendPacket('get', $url);
     }
 
     public function listUsers(?CommandInterface $command = null): ResponseResult

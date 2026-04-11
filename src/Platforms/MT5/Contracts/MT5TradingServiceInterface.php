@@ -5,11 +5,15 @@ namespace Mmt\TradingServiceSdk\Platforms\MT5\Contracts;
 use Mmt\TradingServiceSdk\Contracts\CommandInterface;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ChangePasswordCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CheckPasswordCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CloseAllPositionsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ClosePositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ExecutePositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListUsersCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
@@ -80,6 +84,40 @@ interface MT5TradingServiceInterface
      * @return ResponseResult<PositionItem[]>
      */
     public function getAllPositions(): ResponseResult;
+
+    /**
+     * @param ExecutePositionCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function executePosition(CommandInterface $command): ResponseResult;
+
+    /**
+     * @param ModifyPositionCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function modifyPosition(CommandInterface $command): ResponseResult;
+
+    /**
+     * @param ClosePositionCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function closePosition(CommandInterface $command): ResponseResult;
+
+    /**
+     * @param CloseAllPositionsCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function closeAllPositions(CommandInterface $command): ResponseResult;
+
+    /**
+     * @return ResponseResult<PositionItem[]>
+     */
+    public function getPositions(string $login): ResponseResult;
+
+    /**
+     * @return ResponseResult<PositionItem>
+     */
+    public function getPosition(string $entityId): ResponseResult;
 
     /**
      * @param ?ListUsersCommand $command
