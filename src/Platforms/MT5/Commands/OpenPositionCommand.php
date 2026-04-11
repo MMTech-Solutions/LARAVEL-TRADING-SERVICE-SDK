@@ -6,7 +6,7 @@ use Mmt\TradingServiceSdk\Contracts\CommandInterface;
 use Mmt\TradingServiceSdk\Platforms\MT5\Enums\PositionTradeCommandEnum;
 
 /** Payload for POST /positions/execute; market side uses {@see PositionTradeCommandEnum}. */
-class ExecutePositionCommand implements CommandInterface
+class OpenPositionCommand implements CommandInterface
 {
     public function __construct(
         public string $login,

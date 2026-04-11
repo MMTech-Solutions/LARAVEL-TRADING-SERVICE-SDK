@@ -18,16 +18,23 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListUsersCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\OpenPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\TransactionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\CloseAllPositionItem;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\DealItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\GroupItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\OrderItem;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PositionCloseItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PositionItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\ServerTime;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\SymbolItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\UserItem;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PriceItem;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PriceHistoryItem;
 
 interface MT5TradingServiceInterface
 {
@@ -59,23 +66,24 @@ interface MT5TradingServiceInterface
     public function getSymbol(string $name): ResponseResult;
 
     /**
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<PriceItem>
      */
     public function getLastPrice(string $name): ResponseResult;
 
     /**
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<PriceItem>
      */
     public function getPriceAt(string $name, int $timestamp): ResponseResult;
 
     /**
      * @param GetPriceHistoryCommand $command
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<PriceHistoryItem>
      */
     public function getPriceHistory(CommandInterface $command): ResponseResult;
 
     /**
      * @param CreateUserCommand $command
+     * @return ResponseResult<UserItem>
      */
     public function createUser(CommandInterface $command): ResponseResult;
 
@@ -90,26 +98,26 @@ interface MT5TradingServiceInterface
     public function getAllPositions(): ResponseResult;
 
     /**
-     * @param ExecutePositionCommand $command
-     * @return ResponseResult<mixed>
+     * @param OpenPositionCommand $command
+     * @return ResponseResult<string> Holds the order id
      */
-    public function executePosition(CommandInterface $command): ResponseResult;
+    // public function openPosition(CommandInterface $command): ResponseResult;
 
     /**
      * @param ModifyPositionCommand $command
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<null>
      */
     public function modifyPosition(CommandInterface $command): ResponseResult;
 
     /**
      * @param ClosePositionCommand $command
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<PositionCloseItem>
      */
     public function closePosition(CommandInterface $command): ResponseResult;
 
     /**
      * @param CloseAllPositionsCommand $command
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<CloseAllPositionItem[]>
      */
     public function closeAllPositions(CommandInterface $command): ResponseResult;
 
@@ -124,33 +132,33 @@ interface MT5TradingServiceInterface
     public function getPosition(string $entityId): ResponseResult;
 
     /**
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<DealItem>
      */
     public function getDeal(string $dealId): ResponseResult;
 
     /**
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<DealItem>
      */
     public function getOpenDeal(string $positionId): ResponseResult;
 
     /**
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<DealItem>
      */
     public function getCloseDeal(string $positionId): ResponseResult;
 
     /**
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<DealItem[]>
      */
     public function getAllDealsForPosition(string $positionId): ResponseResult;
 
     /**
      * @param GetDealsHistoryCommand $command
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<DealItem[]>
      */
     public function getDealsHistory(CommandInterface $command): ResponseResult;
 
     /**
-     * @return ResponseResult<mixed>
+     * @return ResponseResult<OrderItem>
      */
     public function getOrder(string $orderId): ResponseResult;
 

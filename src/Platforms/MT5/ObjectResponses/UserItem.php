@@ -2,7 +2,7 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses;
 
-class UserItem
+final class UserItem
 {
     public function __construct(
         public string $login,
