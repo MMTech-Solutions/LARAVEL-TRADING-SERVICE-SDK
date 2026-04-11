@@ -9,8 +9,11 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CloseAllPositionsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ClosePositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ExecutePositionCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetDealsHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetOrdersByTicketsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetOrdersCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
@@ -179,6 +182,68 @@ class MT5TradingService implements MT5TradingServiceInterface
         $url = $this->url.'/'.$this->connectionId.'/positions/'.$this->encodePathSegment($entityId);
 
         return $this->sendPacket('get', $url);
+    }
+
+    public function getDeal(string $dealId): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/deals/'.$this->encodePathSegment($dealId);
+
+        return $this->sendPacket('get', $url);
+    }
+
+    public function getOpenDeal(string $positionId): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/deals/open/'.$this->encodePathSegment($positionId);
+
+        return $this->sendPacket('get', $url);
+    }
+
+    public function getCloseDeal(string $positionId): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/deals/close/'.$this->encodePathSegment($positionId);
+
+        return $this->sendPacket('get', $url);
+    }
+
+    public function getAllDealsForPosition(string $positionId): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/deals/position/'.$this->encodePathSegment($positionId);
+
+        return $this->sendPacket('get', $url);
+    }
+
+    public function getDealsHistory(CommandInterface $command): ResponseResult
+    {
+        if (! $command instanceof GetDealsHistoryCommand) {
+            throw new InvalidArgumentException('Expected '.GetDealsHistoryCommand::class);
+        }
+
+        return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/deals/history', $command->toArray());
+    }
+
+    public function getOrder(string $orderId): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/orders/'.$this->encodePathSegment($orderId);
+
+        return $this->sendPacket('get', $url);
+    }
+
+    public function getOrdersByTickets(CommandInterface $command): ResponseResult
+    {
+        if (! $command instanceof GetOrdersByTicketsCommand) {
+            throw new InvalidArgumentException('Expected '.GetOrdersByTicketsCommand::class);
+        }
+
+        return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/orders/by-tickets', $command->toArray());
+    }
+
+    public function getOrders(CommandInterface $command): ResponseResult
+    {
+        if (! $command instanceof GetOrdersCommand) {
+            throw new InvalidArgumentException('Expected '.GetOrdersCommand::class);
+        }
+
+        return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/orders', $command->toArray());
     }
 
     public function listUsers(?CommandInterface $command = null): ResponseResult

@@ -9,8 +9,11 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CloseAllPositionsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ClosePositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ExecutePositionCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetDealsHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetOrdersByTicketsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetOrdersCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
@@ -118,6 +121,49 @@ interface MT5TradingServiceInterface
      * @return ResponseResult<PositionItem>
      */
     public function getPosition(string $entityId): ResponseResult;
+
+    /**
+     * @return ResponseResult<mixed>
+     */
+    public function getDeal(string $dealId): ResponseResult;
+
+    /**
+     * @return ResponseResult<mixed>
+     */
+    public function getOpenDeal(string $positionId): ResponseResult;
+
+    /**
+     * @return ResponseResult<mixed>
+     */
+    public function getCloseDeal(string $positionId): ResponseResult;
+
+    /**
+     * @return ResponseResult<mixed>
+     */
+    public function getAllDealsForPosition(string $positionId): ResponseResult;
+
+    /**
+     * @param GetDealsHistoryCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function getDealsHistory(CommandInterface $command): ResponseResult;
+
+    /**
+     * @return ResponseResult<mixed>
+     */
+    public function getOrder(string $orderId): ResponseResult;
+
+    /**
+     * @param GetOrdersByTicketsCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function getOrdersByTickets(CommandInterface $command): ResponseResult;
+
+    /**
+     * @param GetOrdersCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function getOrders(CommandInterface $command): ResponseResult;
 
     /**
      * @param ?ListUsersCommand $command
