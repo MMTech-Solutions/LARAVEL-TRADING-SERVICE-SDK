@@ -19,6 +19,7 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListUsersCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\TransactionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\GroupItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
@@ -214,4 +215,16 @@ interface MT5TradingServiceInterface
      * @param SetUserAccessCommand $command
      */
     public function setUserAccess(CommandInterface $command): ResponseResult;
+
+    /**
+     * @param TransactionCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function changeBalance(CommandInterface $command): ResponseResult;
+
+    /**
+     * @param TransactionCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function setBalance(CommandInterface $command): ResponseResult;
 }

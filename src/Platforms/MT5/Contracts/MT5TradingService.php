@@ -18,6 +18,7 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\TransactionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
@@ -329,6 +330,24 @@ class MT5TradingService implements MT5TradingServiceInterface
         }
 
         return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users/access', $command->toArray());
+    }
+
+    public function changeBalance(CommandInterface $command): ResponseResult
+    {
+        if (! $command instanceof TransactionCommand) {
+            throw new InvalidArgumentException('Expected '.TransactionCommand::class);
+        }
+
+        return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/transactions/change', $command->toArray());
+    }
+
+    public function setBalance(CommandInterface $command): ResponseResult
+    {
+        if (! $command instanceof TransactionCommand) {
+            throw new InvalidArgumentException('Expected '.TransactionCommand::class);
+        }
+
+        return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/transactions/set', $command->toArray());
     }
 
     private function encodePathSegment(string $value): string
