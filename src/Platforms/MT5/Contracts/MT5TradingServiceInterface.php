@@ -3,20 +3,27 @@
 namespace Mmt\TradingServiceSdk\Platforms\MT5\Contracts;
 
 use Mmt\TradingServiceSdk\Contracts\CommandInterface;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ChangePasswordCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CheckPasswordCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListUsersCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\GroupItem;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PositionItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\ServerTime;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\SymbolItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\UserItem;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\GroupItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
 
 interface MT5TradingServiceInterface
 {
-    /** 
+    /**
      * @param ?ListSymbolsCommand $command
      * @return ResponseResult<string[]>
      */
@@ -28,10 +35,36 @@ interface MT5TradingServiceInterface
     public function listGroups(): ResponseResult;
 
     /**
+     * @return ResponseResult<GroupItem>
+     */
+    public function getGroup(string $name): ResponseResult;
+
+    /**
      * @param ?ListSymbolsCommand $command
      * @return ResponseResult<SymbolItem[]>
      */
     public function listSymbols(?CommandInterface $command = null): ResponseResult;
+
+    /**
+     * @return ResponseResult<SymbolItem>
+     */
+    public function getSymbol(string $name): ResponseResult;
+
+    /**
+     * @return ResponseResult<mixed>
+     */
+    public function getLastPrice(string $name): ResponseResult;
+
+    /**
+     * @return ResponseResult<mixed>
+     */
+    public function getPriceAt(string $name, int $timestamp): ResponseResult;
+
+    /**
+     * @param GetPriceHistoryCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function getPriceHistory(CommandInterface $command): ResponseResult;
 
     /**
      * @param CreateUserCommand $command
@@ -43,14 +76,13 @@ interface MT5TradingServiceInterface
      */
     public function getServerTime(): ResponseResult;
 
-
     /**
      * @return ResponseResult<PositionItem[]>
      */
     public function getAllPositions(): ResponseResult;
 
     /**
-     * @param ?CommandInterface $command
+     * @param ?ListUsersCommand $command
      * @return ResponseResult<UserItem[]>
      */
     public function listUsers(?CommandInterface $command = null): ResponseResult;
@@ -60,4 +92,42 @@ interface MT5TradingServiceInterface
      * @return ResponseResult<MarginLevelItem>
      */
     public function getMarginLevel(CommandInterface $command): ResponseResult;
+
+    public function getUser(string $login): ResponseResult;
+
+    /**
+     * @param UpdateUserCommand $command
+     */
+    public function updateUser(CommandInterface $command): ResponseResult;
+
+    /**
+     * @param ChangePasswordCommand $command
+     */
+    public function changePassword(CommandInterface $command): ResponseResult;
+
+    /**
+     * @param CheckPasswordCommand $command
+     */
+    public function checkPassword(CommandInterface $command): ResponseResult;
+
+    /**
+     * @param GetMarginLevelsCommand $command
+     * @return ResponseResult<mixed>
+     */
+    public function getMarginLevels(CommandInterface $command): ResponseResult;
+
+    /**
+     * @return ResponseResult<mixed>
+     */
+    public function getMarginLevelsByOpenPositions(): ResponseResult;
+
+    /**
+     * @return ResponseResult<mixed>
+     */
+    public function getAccountState(string $login): ResponseResult;
+
+    /**
+     * @param SetUserAccessCommand $command
+     */
+    public function setUserAccess(CommandInterface $command): ResponseResult;
 }

@@ -8,6 +8,7 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CheckPasswordCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelsCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
@@ -15,6 +16,7 @@ use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportPacket;
+use InvalidArgumentException;
 
 class MT5TradingService implements MT5TradingServiceInterface
 {
@@ -43,19 +45,62 @@ class MT5TradingService implements MT5TradingServiceInterface
         return $this->sendPacket('get', $url);
     }
 
+    public function getGroup(string $name): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/groups/'.$this->encodePathSegment($name);
+
+        return $this->sendPacket('get', $url);
+    }
+
+    public function listSymbols(?CommandInterface $command = null): ResponseResult
+    {
+        return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/symbols', $command?->toArray() ?? []);
+    }
+
+    public function getSymbol(string $name): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/symbols/'.$this->encodePathSegment($name);
+
+        return $this->sendPacket('get', $url);
+    }
+
+    public function getLastPrice(string $name): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/symbols/'.$this->encodePathSegment($name).'/last-price';
+
+        return $this->sendPacket('get', $url);
+    }
+
+    public function getPriceAt(string $name, int $timestamp): ResponseResult
+    {
+        $url = $this->url.'/'.$this->connectionId.'/symbols/'.$this->encodePathSegment($name).'/price-at';
+
+        return $this->sendPacket('get', $url, ['timestamp' => $timestamp]);
+    }
+
+    public function getPriceHistory(CommandInterface $command): ResponseResult
+    {
+        if (! $command instanceof GetPriceHistoryCommand) {
+            throw new InvalidArgumentException('Expected '.GetPriceHistoryCommand::class);
+        }
+
+        $url = $this->url.'/'.$this->connectionId.'/symbols/'.$this->encodePathSegment($command->name).'/price-history';
+
+        return $this->sendPacket('get', $url, $command->toArray());
+    }
+
     public function createUser(CommandInterface $command): ResponseResult
     {
+        if (! $command instanceof CreateUserCommand) {
+            throw new InvalidArgumentException('Expected '.CreateUserCommand::class);
+        }
+
         return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users', $command->toArray());
     }
 
     public function getServerTime(): ResponseResult
     {
         return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/server-time');
-    }
-
-    public function listSymbols(?CommandInterface $command = null): ResponseResult
-    {
-        return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/symbols', $command?->toArray() ?? []);
     }
 
     public function getAllPositions(): ResponseResult
@@ -74,6 +119,10 @@ class MT5TradingService implements MT5TradingServiceInterface
      */
     public function getMarginLevel(CommandInterface $command): ResponseResult
     {
+        if (! $command instanceof GetMarginLevelCommand) {
+            throw new InvalidArgumentException('Expected '.GetMarginLevelCommand::class);
+        }
+
         $login = $this->encodePathSegment($command->login);
         $url = $this->url.'/'.$this->connectionId.'/users/'.$login.'/margin';
 
@@ -87,23 +136,39 @@ class MT5TradingService implements MT5TradingServiceInterface
         return $this->sendPacket('get', $url);
     }
 
-    public function updateUser(UpdateUserCommand $command): ResponseResult
+    public function updateUser(CommandInterface $command): ResponseResult
     {
+        if (! $command instanceof UpdateUserCommand) {
+            throw new InvalidArgumentException('Expected '.UpdateUserCommand::class);
+        }
+
         return $this->sendPacket('patch', $this->url.'/'.$this->connectionId.'/users', $command->toArray());
     }
 
-    public function changePassword(ChangePasswordCommand $command): ResponseResult
+    public function changePassword(CommandInterface $command): ResponseResult
     {
+        if (! $command instanceof ChangePasswordCommand) {
+            throw new InvalidArgumentException('Expected '.ChangePasswordCommand::class);
+        }
+
         return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users/change-password', $command->toArray());
     }
 
-    public function checkPassword(CheckPasswordCommand $command): ResponseResult
+    public function checkPassword(CommandInterface $command): ResponseResult
     {
+        if (! $command instanceof CheckPasswordCommand) {
+            throw new InvalidArgumentException('Expected '.CheckPasswordCommand::class);
+        }
+
         return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users/check-password', $command->toArray());
     }
 
-    public function getMarginLevels(GetMarginLevelsCommand $command): ResponseResult
+    public function getMarginLevels(CommandInterface $command): ResponseResult
     {
+        if (! $command instanceof GetMarginLevelsCommand) {
+            throw new InvalidArgumentException('Expected '.GetMarginLevelsCommand::class);
+        }
+
         return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users/margins', $command->toArray());
     }
 
@@ -119,8 +184,12 @@ class MT5TradingService implements MT5TradingServiceInterface
         return $this->sendPacket('get', $url);
     }
 
-    public function setUserAccess(SetUserAccessCommand $command): ResponseResult
+    public function setUserAccess(CommandInterface $command): ResponseResult
     {
+        if (! $command instanceof SetUserAccessCommand) {
+            throw new InvalidArgumentException('Expected '.SetUserAccessCommand::class);
+        }
+
         return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users/access', $command->toArray());
     }
 
