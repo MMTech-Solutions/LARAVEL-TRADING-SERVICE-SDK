@@ -5,7 +5,7 @@ namespace Mmt\TradingServiceSdk\Platforms;
 use Mmt\TradingServiceSdk\Platforms\Shared\ObjectResponses\BrokerConnectionResponse;
 use Mmt\TradingServiceSdk\Session\BrokerSession;
 use Mmt\TradingServiceSdk\Session\BrokerSessionInterface;
-use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
+use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
 use Mmt\TradingServiceSdk\Platforms\Shared\Commands\ConnectBrokerCommand;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportPacket;
@@ -29,7 +29,7 @@ class TradingService
         $connectionId = $data->connection_id;
 
         return new BrokerSession(
-            connectionId: $connectionId
+            connectionId: $data->connection_id
         );
     }
 
@@ -42,9 +42,9 @@ class TradingService
 
     /**
      * @param ConnectBrokerCommand $command
-     * @return ResponseResult<BrokerConnectionResponse>
+     * @return ActionResultInterface<BrokerConnectionResponse>
      */
-    private function createConnectionId(ConnectBrokerCommand $command): ResponseResult
+    private function createConnectionId(ConnectBrokerCommand $command): ActionResultInterface
     {
         $packet = new TransportPacket(
             endpoint: '/v1/admin/brokers/connect',

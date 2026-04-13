@@ -5,10 +5,9 @@ namespace Mmt\TradingServiceSdk\TransportDrivers\Drivers\Http;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
-use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
+use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportPacket;
-use Throwable;
 
 class TradingServiceHttpClient implements TransportInterface
 {
@@ -25,7 +24,7 @@ class TradingServiceHttpClient implements TransportInterface
         ]);
     }
 
-    public function send(TransportPacket $packet): ResponseResult
+    public function send(TransportPacket $packet): ActionResultInterface
     {
         if (! isset($packet->metadata['method'])) {
             throw new \Exception('Method is required');
@@ -54,140 +53,170 @@ class TradingServiceHttpClient implements TransportInterface
         return $extra;
     }
 
-    private function decode(string $body): object
-    {
-        if ($body === '') {
-            return $this->wrapDecoded(null);
-        }
-
-        $decoded = json_decode($body, false, 512, JSON_THROW_ON_ERROR);
-
-        return $this->wrapDecoded(is_object($decoded) ? $decoded : null);
-    }
-
-    private function wrapDecoded(?object $root): object
-    {
-        return new class ($root) {
-            public function __construct(
-                public readonly ?object $data,
-            ) {}
-
-            public function __get(string $name): mixed
-            {
-                return $this->data?->$name ?? null;
-            }
-        };
-    }
-
-    private function responseFromHttpException(RequestException|ClientException $e): ResponseResult
-    {
-        $response = $e->getResponse();
-        if ($response === null) {
-            return new ResponseResult(
-                code: (string) $e->getCode(),
-                message: $e->getMessage(),
-                success: false,
-            );
-        }
-
-        $contents = $response->getBody()->getContents();
-        $data = $this->decode($contents);
-
-        return new ResponseResult(
-            code: $data->code !== null && $data->code !== '' ? (string) $data->code : (string) $response->getStatusCode(),
-            message: $data->message,
-            success: false,
-            errorDetails: $data->detail ?? null,
-        );
-    }
-
     /**
      * @param array<string, mixed> $metadata
      */
-    private function get(string $uri, array $query = [], array $metadata = []): ResponseResult
+    private function get(string $uri, array $query = [], array $metadata = []): ActionResultInterface
     {
         try {
             $options = $this->clientOptions(
                 $metadata,
-                $query !== [] ? ['query' => $query] : []
+                $query !== [] ? ['query' => $this->queryParamSerializer($query)] : []
             );
             $response = $this->http->get($uri, $options);
 
-            $objectResponse = $this->decode($response->getBody()->getContents());
-            $data = $objectResponse->data;
+            return ResponseResult::fromSuccessResponse($response->getBody()->getContents());
 
-            return new ResponseResult(
-                code: (string) $data->code,
-                message: $data->message,
-                data: $data->data,
-                success: true,
-            );
         } catch (RequestException|ClientException $e) {
-            return $this->responseFromHttpException($e);
-        } catch (Throwable $e) {
-            return new ResponseResult(
-                code: '500',
-                message: $e->getMessage(),
-                success: false,
-            );
+            return ResponseResult::fromErrorResponse($e->getResponse()->getBody()->getContents());
         }
     }
 
     /**
      * @param array<string, mixed> $metadata
      */
-    private function post(string $uri, array $data = [], array $metadata = []): ResponseResult
+    private function post(string $uri, array $data = [], array $metadata = []): ActionResultInterface
     {
         try {
             $options = $this->clientOptions($metadata, ['json' => $data]);
             $response = $this->http->post($uri, $options);
 
-            $objectResponse = $this->decode($response->getBody()->getContents());
-            $data = $objectResponse->data;
+            $strResponse = $response->getBody()->getContents();
+            return ResponseResult::fromSuccessResponse($strResponse);
 
-            return new ResponseResult(
-                code: (string) $data->code,
-                message: $data->message,
-                data: $data->data,
-                success: true,
-            );
         } catch (RequestException|ClientException $e) {
-            return $this->responseFromHttpException($e);
-        } catch (Throwable $e) {
-            return new ResponseResult(
-                code: '500',
-                message: $e->getMessage(),
-                success: false,
-            );
+            return ResponseResult::fromErrorResponse($e->getResponse()->getBody()->getContents());
         }
     }
 
     /**
      * @param array<string, mixed> $metadata
      */
-    private function patch(string $uri, array $data = [], array $metadata = []): ResponseResult
+    private function patch(string $uri, array $data = [], array $metadata = []): ActionResultInterface
     {
         try {
             $options = $this->clientOptions($metadata, ['json' => $data]);
             $response = $this->http->patch($uri, $options);
 
-            $objectResponse = $this->decode($response->getBody()->getContents());
-            $data = $objectResponse->data;
+            return ResponseResult::fromSuccessResponse($response->getBody()->getContents());
 
-            return new ResponseResult(
-                code: (string) $data->code,
-                message: $data->message,
-                data: $data->data,
-                success: true,
-            );
         } catch (RequestException|ClientException $e) {
-            return $this->responseFromHttpException($e);
-        } catch (Throwable $e) {
-            return new ResponseResult(
-                code: '500',
-                message: $e->getMessage(),
-                success: false,
-            );
+            return ResponseResult::fromErrorResponse($e->getResponse()->getBody()->getContents());
         }
+    }
+
+    /**
+     * El nombre en la query es siempre la clave del array asociativo de nivel superior (p. ej. login=…).
+     * Lista de escalares: repite la misma clave (login=1&login=2). Asociativo anidado: login[a]=….
+     * Lista con elementos array: login[0][a]=….
+     *
+     * @param array<string, mixed> $queryParams
+     */
+    private function queryParamSerializer(array $queryParams): string
+    {
+        $parts = [];
+        foreach ($queryParams as $name => $value) {
+            $this->appendQueryValue($parts, (string) $name, $value);
+        }
+
+        return implode('&', $parts);
+    }
+
+    /**
+     * @param list<string> $parts
+     */
+    private function appendQueryValue(array &$parts, string $key, mixed $value): void
+    {
+        if ($value === null) {
+            return;
+        }
+
+        if (is_array($value)) {
+            if ($value === []) {
+                return;
+            }
+
+            if (array_is_list($value)) {
+                foreach ($value as $index => $item) {
+                    if (is_array($item)) {
+                        $this->appendQueryValue($parts, $key.'['.$index.']', $item);
+                    } else {
+                        $this->appendQueryValue($parts, $key, $item);
+                    }
+                }
+
+                return;
+            }
+
+            $scalarSequence = $this->liftZeroBasedScalarSequence($value);
+            if ($scalarSequence !== null) {
+                foreach ($scalarSequence as $item) {
+                    $this->appendQueryValue($parts, $key, $item);
+                }
+
+                return;
+            }
+
+            foreach ($value as $subKey => $item) {
+                $this->appendQueryValue($parts, $key.'['.$subKey.']', $item);
+            }
+
+            return;
+        }
+
+        $parts[] = rawurlencode($key).'='.rawurlencode($this->queryScalarToString($value));
+    }
+
+    /**
+     * Si el array no es lista de PHP pero equivale a [0=>escalar, 1=>escalar, …] (claves int o dígitos),
+     * devuelve los valores en orden para serializar como clave repetida.
+     *
+     * @return list<mixed>|null
+     */
+    private function liftZeroBasedScalarSequence(array $value): ?array
+    {
+        $out = [];
+        $i = 0;
+        foreach ($value as $k => $item) {
+            if (is_array($item)) {
+                return null;
+            }
+            if (is_int($k)) {
+                if ($k !== $i) {
+                    return null;
+                }
+            } elseif (is_string($k) && ctype_digit($k)) {
+                if ((int) $k !== $i) {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+            $out[] = $item;
+            $i++;
+        }
+
+        return $out;
+    }
+
+    private function queryScalarToString(mixed $value): string
+    {
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        if (is_float($value)) {
+            if (is_nan($value) || is_infinite($value)) {
+                throw new \InvalidArgumentException('No se puede serializar float no finito en query string.');
+            }
+
+            return (string) $value;
+        }
+
+        if (is_int($value) || $value instanceof \Stringable || is_string($value)) {
+            return (string) $value;
+        }
+
+        throw new \InvalidArgumentException('Tipo no soportado para query string: '.get_debug_type($value));
     }
 }

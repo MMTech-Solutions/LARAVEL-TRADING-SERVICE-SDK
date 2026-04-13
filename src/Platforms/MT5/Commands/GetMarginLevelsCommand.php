@@ -15,8 +15,6 @@ class GetMarginLevelsCommand implements CommandInterface
 
     public function toArray(): array
     {
-        return [
-            'logins' => $this->logins,
-        ];
+        return $this->logins;
     }
 }

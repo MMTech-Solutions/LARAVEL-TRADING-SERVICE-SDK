@@ -8,7 +8,6 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CheckPasswordCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CloseAllPositionsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ClosePositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ExecutePositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetDealsHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelsCommand;
@@ -18,10 +17,10 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListUsersCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\OpenPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\TransactionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\AccountStateItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\CloseAllPositionItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\DealItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\GroupItem;
@@ -31,208 +30,215 @@ use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PositionCloseItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PositionItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\ServerTime;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\SymbolItem;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\TransactionItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\UserItem;
-use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ResponseResult;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PriceItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PriceHistoryItem;
+use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
 
 interface MT5TradingServiceInterface
 {
     /**
      * @param ?ListSymbolsCommand $command
-     * @return ResponseResult<string[]>
+     * @return ActionResultInterface<string[]>
      */
-    public function getSymbolCategories(?CommandInterface $command = null): ResponseResult;
+    public function getSymbolCategories(?CommandInterface $command = null): ActionResultInterface;
 
     /**
-     * @return ResponseResult<GroupItem[]>
+     * @return ActionResultInterface<GroupItem[]>
      */
-    public function listGroups(): ResponseResult;
+    public function listGroups(): ActionResultInterface;
 
     /**
-     * @return ResponseResult<GroupItem>
+     * @return ActionResultInterface<GroupItem>
      */
-    public function getGroup(string $name): ResponseResult;
+    public function getGroup(string $name): ActionResultInterface;
 
     /**
      * @param ?ListSymbolsCommand $command
-     * @return ResponseResult<SymbolItem[]>
+     * @return ActionResultInterface<SymbolItem[]>
      */
-    public function listSymbols(?CommandInterface $command = null): ResponseResult;
+    public function listSymbols(?CommandInterface $command = null): ActionResultInterface;
 
     /**
-     * @return ResponseResult<SymbolItem>
+     * @return ActionResultInterface<SymbolItem>
      */
-    public function getSymbol(string $name): ResponseResult;
+    public function getSymbol(string $name): ActionResultInterface;
 
     /**
-     * @return ResponseResult<PriceItem>
+     * @return ActionResultInterface<PriceItem>
      */
-    public function getLastPrice(string $name): ResponseResult;
+    public function getLastPrice(string $name): ActionResultInterface;
 
     /**
-     * @return ResponseResult<PriceItem>
+     * @return ActionResultInterface<PriceItem>
      */
-    public function getPriceAt(string $name, int $timestamp): ResponseResult;
+    public function getPriceAt(string $name, int $timestamp): ActionResultInterface;
 
     /**
      * @param GetPriceHistoryCommand $command
-     * @return ResponseResult<PriceHistoryItem>
+     * @return ActionResultInterface<PriceHistoryItem>
      */
-    public function getPriceHistory(CommandInterface $command): ResponseResult;
+    public function getPriceHistory(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param CreateUserCommand $command
-     * @return ResponseResult<UserItem>
+     * @return ActionResultInterface<UserItem>
      */
-    public function createUser(CommandInterface $command): ResponseResult;
+    public function createUser(CommandInterface $command): ActionResultInterface;
 
     /**
-     * @return ResponseResult<ServerTime>
+     * @return ActionResultInterface<ServerTime>
      */
-    public function getServerTime(): ResponseResult;
+    public function getServerTime(): ActionResultInterface;
 
     /**
-     * @return ResponseResult<PositionItem[]>
+     * @return ActionResultInterface<PositionItem[]>
      */
-    public function getAllPositions(): ResponseResult;
+    public function getAllPositions(): ActionResultInterface;
 
     /**
      * @param OpenPositionCommand $command
-     * @return ResponseResult<string> Holds the order id
+     * @return ActionResultInterface<string> Holds the order id
      */
-    // public function openPosition(CommandInterface $command): ResponseResult;
+    // public function openPosition(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param ModifyPositionCommand $command
-     * @return ResponseResult<null>
+     * @return ActionResultInterface<null>
      */
-    public function modifyPosition(CommandInterface $command): ResponseResult;
+    public function modifyPosition(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param ClosePositionCommand $command
-     * @return ResponseResult<PositionCloseItem>
+     * @return ActionResultInterface<PositionCloseItem>
      */
-    public function closePosition(CommandInterface $command): ResponseResult;
+    public function closePosition(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param CloseAllPositionsCommand $command
-     * @return ResponseResult<CloseAllPositionItem[]>
+     * @return ActionResultInterface<CloseAllPositionItem[]>
      */
-    public function closeAllPositions(CommandInterface $command): ResponseResult;
+    public function closeAllPositions(CommandInterface $command): ActionResultInterface;
 
     /**
-     * @return ResponseResult<PositionItem[]>
+     * @return ActionResultInterface<PositionItem[]>
      */
-    public function getPositions(string $login): ResponseResult;
+    public function getPositions(string $login): ActionResultInterface;
 
     /**
-     * @return ResponseResult<PositionItem>
+     * @return ActionResultInterface<PositionItem>
      */
-    public function getPosition(string $entityId): ResponseResult;
+    public function getPosition(string $entityId): ActionResultInterface;
 
     /**
-     * @return ResponseResult<DealItem>
+     * @return ActionResultInterface<DealItem>
      */
-    public function getDeal(string $dealId): ResponseResult;
+    public function getDeal(string $dealId): ActionResultInterface;
 
     /**
-     * @return ResponseResult<DealItem>
+     * @return ActionResultInterface<DealItem>
      */
-    public function getOpenDeal(string $positionId): ResponseResult;
+    public function getOpenDeal(string $positionId): ActionResultInterface;
 
     /**
-     * @return ResponseResult<DealItem>
+     * @return ActionResultInterface<DealItem>
      */
-    public function getCloseDeal(string $positionId): ResponseResult;
+    public function getCloseDeal(string $positionId): ActionResultInterface;
 
     /**
-     * @return ResponseResult<DealItem[]>
+     * @return ActionResultInterface<DealItem[]>
      */
-    public function getAllDealsForPosition(string $positionId): ResponseResult;
+    public function getAllDealsForPosition(string $positionId): ActionResultInterface;
 
     /**
      * @param GetDealsHistoryCommand $command
-     * @return ResponseResult<DealItem[]>
+     * @return ActionResultInterface<DealItem[]>
      */
-    public function getDealsHistory(CommandInterface $command): ResponseResult;
+    public function getDealsHistory(CommandInterface $command): ActionResultInterface;
 
     /**
-     * @return ResponseResult<OrderItem>
+     * @return ActionResultInterface<OrderItem>
      */
-    public function getOrder(string $orderId): ResponseResult;
+    public function getOrder(string $orderId): ActionResultInterface;
 
     /**
      * @param GetOrdersByTicketsCommand $command
-     * @return ResponseResult<mixed>
+     * @return ActionResultInterface<OrderItem[]>
      */
-    public function getOrdersByTickets(CommandInterface $command): ResponseResult;
+    public function getOrdersByTickets(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param GetOrdersCommand $command
-     * @return ResponseResult<mixed>
+     * @return ActionResultInterface<OrderItem[]>
      */
-    public function getOrders(CommandInterface $command): ResponseResult;
+    public function getOrders(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param ?ListUsersCommand $command
-     * @return ResponseResult<UserItem[]>
+     * @return ActionResultInterface<UserItem[]>
      */
-    public function listUsers(?CommandInterface $command = null): ResponseResult;
+    public function listUsers(?CommandInterface $command = null): ActionResultInterface;
 
     /**
      * @param GetMarginLevelCommand $command
-     * @return ResponseResult<MarginLevelItem>
+     * @return ActionResultInterface<MarginLevelItem>
      */
-    public function getMarginLevel(CommandInterface $command): ResponseResult;
+    public function getMarginLevel(CommandInterface $command): ActionResultInterface;
 
-    public function getUser(string $login): ResponseResult;
+    /**
+     * @return ActionResultInterface<UserItem>
+     */
+    public function getUser(string $login): ActionResultInterface;
 
     /**
      * @param UpdateUserCommand $command
+     * @return ActionResultInterface<UserItem>
      */
-    public function updateUser(CommandInterface $command): ResponseResult;
+    public function updateUser(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param ChangePasswordCommand $command
      */
-    public function changePassword(CommandInterface $command): ResponseResult;
+    public function changePassword(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param CheckPasswordCommand $command
+     * @return ActionResultInterface<null>
      */
-    public function checkPassword(CommandInterface $command): ResponseResult;
+    public function checkPassword(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param GetMarginLevelsCommand $command
-     * @return ResponseResult<mixed>
+     * @return ActionResultInterface<MarginLevelItem[]>
      */
-    public function getMarginLevels(CommandInterface $command): ResponseResult;
+    public function getMarginLevels(CommandInterface $command): ActionResultInterface;
 
     /**
-     * @return ResponseResult<mixed>
+     * @return ActionResultInterface<MarginLevelItem>
      */
-    public function getMarginLevelsByOpenPositions(): ResponseResult;
+    public function getMarginLevelsByOpenPositions(): ActionResultInterface;
 
     /**
-     * @return ResponseResult<mixed>
+     * @return ActionResultInterface<AccountStateItem>
      */
-    public function getAccountState(string $login): ResponseResult;
+    public function getAccountState(string $login): ActionResultInterface;
 
     /**
      * @param SetUserAccessCommand $command
+     * @return ActionResultInterface<null>
      */
-    public function setUserAccess(CommandInterface $command): ResponseResult;
+    public function setUserAccess(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param TransactionCommand $command
-     * @return ResponseResult<mixed>
+     * @return ActionResultInterface<TransactionItem>
      */
-    public function changeBalance(CommandInterface $command): ResponseResult;
+    public function changeBalance(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param TransactionCommand $command
-     * @return ResponseResult<mixed>
+     * @return ActionResultInterface<TransactionItem>
      */
-    public function setBalance(CommandInterface $command): ResponseResult;
+    public function setBalance(CommandInterface $command): ActionResultInterface;
 }

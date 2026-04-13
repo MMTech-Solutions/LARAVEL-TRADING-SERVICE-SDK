@@ -4,5 +4,5 @@ namespace Mmt\TradingServiceSdk\TransportDrivers\Contracts;
 
 interface TransportInterface
 {
-    public function send(TransportPacket $packet): ResponseResult;
+    public function send(TransportPacket $packet): ActionResultInterface;
 }
