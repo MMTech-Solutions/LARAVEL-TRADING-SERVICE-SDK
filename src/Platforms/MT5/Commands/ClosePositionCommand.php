@@ -8,6 +8,7 @@ class ClosePositionCommand implements CommandInterface
 {
     public function __construct(
         public string $position_id,
+        /** If the volume is not provided, the position will be closed with the maximum available volume. */
         public float $volume = 0.0,
         public ?string $comment = null,
     ) {}

@@ -2,7 +2,7 @@
 
 Cliente PHP (**SDK**) para Laravel que integra aplicaciones con el **MMT Trading Service**: operaciones de administración de brokers y de plataformas de trading (MT5 y futuras) mediante una API tipada, sin acoplar el dominio de la aplicación a detalles HTTP.
 
-**Versión estable:** `1.0.0.0` (etiqueta Git `v1.0.0.0`).
+**Versión estable:** `1.1.0.0` (etiqueta Git `v1.1.0.0`). Release anterior: `v1.0.0.0`.
 
 ## Propósito
 
@@ -70,7 +70,10 @@ $mt5 = $session->mt5();
 $result = $mt5->listGroups();
 
 if ($result->isSuccess()) {
-    $data = $result->getData(); // object|array según payload del API
+    // Sin segundo argumento: el `data` del JSON tal cual (array asociativo / lista).
+    $raw = $result->getData();
+    // Con clase: instancia o lista de instancias (ver sección siguiente).
+    // $dto = $result->getData(AlgúnItem::class);
 }
 ```
 
@@ -88,9 +91,11 @@ $mt5 = $session->mt5();
 - `fromSuccessResponse(string $rawJson)` — parsea el envelope de éxito (`code`, `message`, `data`).
 - `fromErrorResponse(string $rawJson)` — parsea errores (incluye `detail` en `getErrorDetails()` cuando exista).
 
-Métodos habituales: `isSuccess()`, `getCode()`, `getMessage()`, `getData()`, `getErrorDetails()`, `getRawResponse()`.
+Métodos habituales: `isSuccess()`, `getCode()`, `getMessage()`, `getData(?string $castToFqcn = null)`, `getErrorDetails()`, `getRawResponse()`.
 
-Los métodos de `MT5TradingServiceInterface` declaran en PHPDoc el tipo esperado de `getData()` cuando el contrato del API es estable (p. ej. listados, DTOs en `Platforms/MT5/ObjectResponses/`).
+**Cast opcional de `data`:** si pasas un FQCN de clase con constructor promovido cuyos nombres de parámetro coinciden con las claves de cada elemento del JSON (p. ej. `BrokerConnectionResponse`, `OpenPositionItem`, `PositionItem`), `getData(EsaClase::class)` devuelve una instancia; si `data` es una lista homogénea, devuelve un array de instancias. `TradingService::connect()` usa internamente `getData(BrokerConnectionResponse::class)` para tipar la respuesta de conexión.
+
+Los métodos de `MT5TradingServiceInterface` siguen documentando en PHPDoc el tipo lógico de `getData()` (p. ej. `OpenPositionItem` tras `openPosition()`).
 
 ### 3. Inyección directa de MT5
 
@@ -124,14 +129,14 @@ La forma devuelta al conectar está descrita en `Platforms\Shared\ObjectResponse
 
 ## Superficie MT5 y otros módulos
 
-La lista autoritativa de operaciones MT5 disponibles en esta versión es **`MT5TradingServiceInterface`**: símbolos, grupos, usuarios, posiciones, deals, órdenes, márgenes, transacciones, precios, etc. Los comandos viven en `src/Platforms/MT5/Commands/`; respuestas y enums en `ObjectResponses/` y `Enums/`.
+La lista autoritativa de operaciones MT5 disponibles en esta versión es **`MT5TradingServiceInterface`**: símbolos, grupos, usuarios, **`openPosition()`** (`OpenPositionCommand` → `OpenPositionItem`), posiciones (incl. modificar/cerrar), deals, órdenes, márgenes, transacciones, precios, etc. Los comandos viven en `src/Platforms/MT5/Commands/`; respuestas y enums en `ObjectResponses/` y `Platforms/MT5/Enums/`. Para idioma de usuario en alta/actualización se usa **`LanguagesEnum`** (`src/Enums/LanguagesEnum.php`). **`UpdateUserCommand`** ya no incluye el campo `name` en el payload (alineado con el API).
 
 ## Estructura del código (resumen)
 
 ```
 src/
 ├── Contracts/                    # CommandInterface
-├── Enums/                        # p. ej. PlatformEnum
+├── Enums/                        # PlatformEnum, LanguagesEnum, …
 ├── Exceptions/
 ├── Session/                      # BrokerSession, BrokerSessionInterface
 ├── Platforms/
@@ -146,7 +151,14 @@ src/
 
 ## Versionado
 
-Este repositorio usa etiquetas Git para releases públicas. La primera línea estable publicada es **`v1.0.0.0`**. En `composer.json` de la aplicación consumidora puedes fijar la dependencia a esa etiqueta o al rango que definas en tu política interna.
+Este repositorio usa etiquetas Git para releases públicas. La serie **1.x** incluye:
+
+| Etiqueta   | Notas breves |
+|------------|----------------|
+| `v1.0.0.0` | Base estable: sesión, MT5 vía interfaz, `ActionResult` / `ResponseResult` HTTP. |
+| `v1.1.0.0` | Menor: `openPosition`, `LanguagesEnum` en usuarios, `getData(FQCN)` con mapeo a DTOs, `PositionItem` por constructor, ajustes en comandos y márgenes. |
+
+En la aplicación consumidora fija la dependencia a la etiqueta concreta (p. ej. `1.1.0.0`) o al criterio semver que uses internamente.
 
 ## Licencia
 

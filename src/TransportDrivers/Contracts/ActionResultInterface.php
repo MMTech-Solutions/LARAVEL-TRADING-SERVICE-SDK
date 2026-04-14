@@ -11,9 +11,10 @@ interface ActionResultInterface
     public function getCode(): string;
     public function getMessage(): ?string;
     /**
+     * @param class-string<T>|null $castToFqcn
      * @return T
      */
-    public function getData(): mixed;
+    public function getData(?string $castToFqcn = null): mixed;
 
     public function getErrorDetails(): mixed;
     public function getRawResponse(): string;

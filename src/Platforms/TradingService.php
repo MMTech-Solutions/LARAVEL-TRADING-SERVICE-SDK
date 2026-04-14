@@ -24,7 +24,7 @@ class TradingService
             throw new \Exception('Failed to create connection');
         }
 
-        $data = $response->getData();
+        $data = $response->getData(BrokerConnectionResponse::class);
 
         $connectionId = $data->connection_id;
 

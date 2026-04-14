@@ -16,6 +16,7 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetOrdersCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\OpenPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\TransactionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
@@ -121,11 +122,11 @@ class MT5TradingService implements MT5TradingServiceInterface
         return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/positions/all');
     }
 
-    public function executePosition(CommandInterface $command): ActionResultInterface
+    public function openPosition(CommandInterface $command): ActionResultInterface
     {
-        // if (! $command instanceof ExecutePositionCommand) {
-        //     throw new InvalidArgumentException('Expected '.ExecutePositionCommand::class);
-        // }
+        if (! $command instanceof OpenPositionCommand) {
+            throw new InvalidArgumentException('Expected '.OpenPositionCommand::class);
+        }
 
         return $this->sendPacket(
             'post',
@@ -306,8 +307,6 @@ class MT5TradingService implements MT5TradingServiceInterface
         if (! $command instanceof GetMarginLevelsCommand) {
             throw new InvalidArgumentException('Expected '.GetMarginLevelsCommand::class);
         }
-
-        $logins = array_map(fn($login) => $this->encodePathSegment($login), $command->logins);
 
         return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/users/margins', ['logins' => $command->toArray()]);
     }

@@ -3,6 +3,7 @@
 namespace Mmt\TradingServiceSdk\Platforms\MT5\Commands;
 
 use Mmt\TradingServiceSdk\Contracts\CommandInterface;
+use Mmt\TradingServiceSdk\Enums\LanguagesEnum;
 
 
 /**
@@ -21,7 +22,7 @@ class CreateUserCommand implements CommandInterface
         public ?string $first_name = null,
         public ?string $last_name = null,
         public ?string $company = null,
-        public ?string $language = null,
+        public ?LanguagesEnum $language = null,
         public ?string $country = null,
         public ?string $city = null,
         public ?string $state = null,
@@ -44,7 +45,7 @@ class CreateUserCommand implements CommandInterface
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'company' => $this->company,
-            'language' => $this->language,
+            'language' => $this->language?->value,
             'country' => $this->country,
             'city' => $this->city,
             'state' => $this->state,

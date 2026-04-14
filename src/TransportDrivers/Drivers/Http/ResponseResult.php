@@ -25,8 +25,17 @@ class ResponseResult implements ActionResultInterface
         return $this->message;
     }
 
-    public function getData(): mixed
+    public function getData(?string $castToFqcn = null): mixed
     {
+        if ($castToFqcn && isset($this->data)) {
+            if (array_is_list($this->data)) {
+                return array_map(fn($item) => new $castToFqcn(...$item), $this->data);
+            }
+            else {
+                return new $castToFqcn(...$this->data);
+            }
+        }
+        
         return $this->data;
     }
 
@@ -48,13 +57,10 @@ class ResponseResult implements ActionResultInterface
     public static function fromSuccessResponse(string $rawResponse): ActionResultInterface
     {
         $decoded = json_decode($rawResponse, true, 512, JSON_THROW_ON_ERROR);
-
-        $responseData = $decoded['data'] ?? null;
-
         return new self(
             code: $decoded['code'] ?? '',
             message: $decoded['message'] ?? null,
-            data: is_array($responseData) && count($responseData) == 0 ? [] : (object)$responseData,
+            data: $decoded['data'] ?? null,
             success: true,
             rawResponse: $rawResponse,
         );
@@ -67,7 +73,7 @@ class ResponseResult implements ActionResultInterface
             code: $decoded['code'] ?? 'NO_CODE',
             message: $decoded['message'] ?? null,
             success: false,
-            errorDetails: $decoded['detail'],
+            errorDetails: $decoded['detail'] ?? null,
             rawResponse: $rawResponse,
         );
     }

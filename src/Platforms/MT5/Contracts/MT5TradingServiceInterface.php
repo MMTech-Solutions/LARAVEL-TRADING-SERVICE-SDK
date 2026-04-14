@@ -17,6 +17,7 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListUsersCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\OpenPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\TransactionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
@@ -25,6 +26,7 @@ use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\CloseAllPositionItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\DealItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\GroupItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\OpenPositionItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\OrderItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PositionCloseItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PositionItem;
@@ -99,9 +101,9 @@ interface MT5TradingServiceInterface
 
     /**
      * @param OpenPositionCommand $command
-     * @return ActionResultInterface<string> Holds the order id
+     * @return ActionResultInterface<OpenPositionItem>
      */
-    // public function openPosition(CommandInterface $command): ActionResultInterface;
+    public function openPosition(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param ModifyPositionCommand $command
@@ -199,6 +201,7 @@ interface MT5TradingServiceInterface
 
     /**
      * @param ChangePasswordCommand $command
+     * @return ActionResultInterface<null>
      */
     public function changePassword(CommandInterface $command): ActionResultInterface;
 
