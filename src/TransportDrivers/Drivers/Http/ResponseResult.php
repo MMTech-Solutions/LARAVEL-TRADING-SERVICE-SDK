@@ -44,6 +44,11 @@ class ResponseResult implements ActionResultInterface
         return $this->success;
     }
 
+    public function isError(): bool
+    {
+        return !$this->success;
+    }
+
     public function getErrorDetails(): mixed
     {
         return $this->errorDetails;
@@ -78,4 +83,12 @@ class ResponseResult implements ActionResultInterface
         );
     }
     
+    public static function fromFatalError(string $message): ActionResultInterface
+    {
+        return new self(
+            code: 'FATAL_ERROR',
+            message: $message,
+            success: false
+        );
+    }
 }

@@ -8,6 +8,7 @@ namespace Mmt\TradingServiceSdk\TransportDrivers\Contracts;
 interface ActionResultInterface
 {
     public function isSuccess(): bool;
+    public function isFailure(): bool;
     public function getCode(): string;
     public function getMessage(): ?string;
     /**

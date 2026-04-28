@@ -4,10 +4,12 @@ namespace Mmt\TradingServiceSdk\TransportDrivers\Drivers\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportPacket;
+use Throwable;
 
 class TradingServiceHttpClient implements TransportInterface
 {
@@ -70,6 +72,9 @@ class TradingServiceHttpClient implements TransportInterface
         } catch (RequestException|ClientException $e) {
             return ResponseResult::fromErrorResponse($e->getResponse()->getBody()->getContents());
         }
+        catch(ConnectException $e) {
+            return ResponseResult::fromFatalError('Connection failed. Please check your internet connection and try again.');
+        }
     }
 
     /**
@@ -86,6 +91,9 @@ class TradingServiceHttpClient implements TransportInterface
 
         } catch (RequestException|ClientException $e) {
             return ResponseResult::fromErrorResponse($e->getResponse()->getBody()->getContents());
+        }
+        catch(ConnectException $e) {
+            return ResponseResult::fromFatalError('Connection failed. Please check your internet connection and try again.');
         }
     }
 

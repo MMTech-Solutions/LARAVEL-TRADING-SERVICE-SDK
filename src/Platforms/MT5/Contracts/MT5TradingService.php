@@ -2,28 +2,16 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\MT5\Contracts;
 
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\{
+    ChangePasswordCommand, CheckPasswordCommand, CloseAllPositionsCommand, ClosePositionCommand, CreateUserCommand,
+    GetDealsHistoryCommand, GetMarginLevelCommand, GetMarginLevelsCommand, GetOrdersByTicketsCommand, GetOrdersCommand,
+    GetPriceHistoryCommand, ListSymbolsCommand, ModifyPositionCommand, OpenPositionCommand, SetUserAccessCommand, TransactionCommand, UpdateUserCommand
+};
+use Mmt\TradingServiceSdk\TransportDrivers\Contracts\{
+    ActionResultInterface, TransportInterface, TransportPacket
+};
 use Mmt\TradingServiceSdk\Contracts\CommandInterface;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ChangePasswordCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CheckPasswordCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CloseAllPositionsCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ClosePositionCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetDealsHistoryCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelsCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetOrdersByTicketsCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetOrdersCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\OpenPositionCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\TransactionCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
-use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
-use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportInterface;
-use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportPacket;
 use InvalidArgumentException;
 
 class MT5TradingService implements MT5TradingServiceInterface
@@ -40,6 +28,11 @@ class MT5TradingService implements MT5TradingServiceInterface
         private readonly string $connectionId,
         private readonly TransportInterface $transport
     ) {}
+
+    public function getGroupHierarchy(): ActionResultInterface
+    {
+        return $this->sendPacket('get', $this->url.'/'.$this->connectionId.'/groups/hierarchy');
+    }
 
     /**
      * @param ?ListSymbolsCommand $command
@@ -109,7 +102,7 @@ class MT5TradingService implements MT5TradingServiceInterface
             throw new InvalidArgumentException('Expected '.CreateUserCommand::class);
         }
 
-        return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users', $command->toArray());
+        return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users', $command->toArray(), ['timeout' => 60]);
     }
 
     public function getServerTime(): ActionResultInterface

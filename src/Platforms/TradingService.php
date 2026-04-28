@@ -16,6 +16,13 @@ class TradingService
         private readonly TransportInterface $transport,
     ) {}
 
+
+    /**
+     * @param ConnectBrokerCommand $command
+     * @param string|null $connectionId
+     * @return BrokerSessionInterface
+     * @throws \Exception If the connection fails
+     */
     public function connect(ConnectBrokerCommand $command, ?string &$connectionId = null): BrokerSessionInterface
     {
         $response = $this->createConnectionId($command);
@@ -40,6 +47,21 @@ class TradingService
         );
     }
 
+    public function disconnect(string $connectionId): void
+    {
+        $packet = new TransportPacket(
+            endpoint: '/v1/admin/brokers/disconnect',
+            payload: [
+                'connection_id' => $connectionId,
+            ],
+            metadata: [
+                'method' => 'post',
+            ],
+        );
+
+        $this->transport->send($packet);
+    }
+
     /**
      * @param ConnectBrokerCommand $command
      * @return ActionResultInterface<BrokerConnectionResponse>
@@ -56,4 +78,5 @@ class TradingService
 
         return $this->transport->send($packet);
     }
+
 }

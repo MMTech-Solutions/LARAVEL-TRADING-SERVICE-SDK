@@ -2,41 +2,21 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\MT5\Contracts;
 
-use Mmt\TradingServiceSdk\Contracts\CommandInterface;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ChangePasswordCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CheckPasswordCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CloseAllPositionsCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ClosePositionCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\CreateUserCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetDealsHistoryCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetMarginLevelsCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetOrdersByTicketsCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetOrdersCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\GetPriceHistoryCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListSymbolsCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListUsersCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\OpenPositionCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\TransactionCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\AccountStateItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\CloseAllPositionItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\DealItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\GroupItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\OpenPositionItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\OrderItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PositionCloseItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PositionItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\ServerTime;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\SymbolItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\TransactionItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\UserItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PriceItem;
-use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\PriceHistoryItem;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\{
+    ChangePasswordCommand, CheckPasswordCommand, CloseAllPositionsCommand, ClosePositionCommand, CreateUserCommand,
+    GetDealsHistoryCommand, GetMarginLevelCommand, GetMarginLevelsCommand, GetOrdersByTicketsCommand, GetOrdersCommand,
+    GetPriceHistoryCommand, ListSymbolsCommand, ModifyPositionCommand, ListUsersCommand, OpenPositionCommand,
+    SetUserAccessCommand, TransactionCommand, UpdateUserCommand
+};
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\{
+    AccountStateItem, CloseAllPositionItem, DealItem, GroupItem,
+    HierarchyGroupItem, MarginLevelItem, OpenPositionItem, OrderItem,
+    PositionCloseItem, PositionItem, ServerTime, SymbolItem,
+    TransactionItem, UserItem, PriceItem, PriceHistoryItem
+};
+
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
+use Mmt\TradingServiceSdk\Contracts\CommandInterface;
 
 interface MT5TradingServiceInterface
 {
@@ -244,4 +224,9 @@ interface MT5TradingServiceInterface
      * @return ActionResultInterface<TransactionItem>
      */
     public function setBalance(CommandInterface $command): ActionResultInterface;
+
+    /**
+     * @return ActionResultInterface<HierarchyGroupItem[]>
+     */
+    public function getGroupHierarchy(): ActionResultInterface;
 }

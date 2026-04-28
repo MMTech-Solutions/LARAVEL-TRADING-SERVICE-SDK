@@ -11,6 +11,7 @@ class SymbolItem
         public readonly int $contract_size,
         public readonly int $volume_step,
         public readonly int $digits,
+        public readonly string $description,
     ) {}
 
     
@@ -23,6 +24,7 @@ class SymbolItem
             contract_size: $data['contract_size'],
             volume_step: $data['volume_step'],
             digits: $data['digits'],
+            description: $data['description'],
         );
     }
 }
