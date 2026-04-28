@@ -3,6 +3,7 @@
 namespace Mmt\TradingServiceSdk\TransportDrivers\Drivers\Http;
 
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
+use Mmt\TradingServiceSdk\WireHydration\WireHydrator;
 
 class ResponseResult implements ActionResultInterface
 {
@@ -29,14 +30,26 @@ class ResponseResult implements ActionResultInterface
     {
         if ($castToFqcn && isset($this->data)) {
             if (array_is_list($this->data)) {
-                return array_map(fn($item) => new $castToFqcn(...$item), $this->data);
-            }
-            else {
+                return array_map(fn ($item) => new $castToFqcn(...$item), $this->data);
+            } else {
                 return new $castToFqcn(...$this->data);
             }
         }
-        
+
         return $this->data;
+    }
+
+    public function getMappedData(?string $castToFqcn = null): mixed
+    {
+        if ($castToFqcn === null) {
+            return $this->data;
+        }
+
+        if ($this->data === null) {
+            return null;
+        }
+
+        return (new WireHydrator)->hydrate($this->data, $castToFqcn);
     }
 
     public function isSuccess(): bool
@@ -44,9 +57,14 @@ class ResponseResult implements ActionResultInterface
         return $this->success;
     }
 
+    public function isFailure(): bool
+    {
+        return ! $this->success;
+    }
+
     public function isError(): bool
     {
-        return !$this->success;
+        return ! $this->success;
     }
 
     public function getErrorDetails(): mixed
@@ -62,6 +80,7 @@ class ResponseResult implements ActionResultInterface
     public static function fromSuccessResponse(string $rawResponse): ActionResultInterface
     {
         $decoded = json_decode($rawResponse, true, 512, JSON_THROW_ON_ERROR);
+
         return new self(
             code: $decoded['code'] ?? '',
             message: $decoded['message'] ?? null,
@@ -74,6 +93,7 @@ class ResponseResult implements ActionResultInterface
     public static function fromErrorResponse(string $rawResponse): ActionResultInterface
     {
         $decoded = json_decode($rawResponse, true, 512, JSON_THROW_ON_ERROR);
+
         return new self(
             code: $decoded['code'] ?? 'NO_CODE',
             message: $decoded['message'] ?? null,
@@ -82,7 +102,7 @@ class ResponseResult implements ActionResultInterface
             rawResponse: $rawResponse,
         );
     }
-    
+
     public static function fromFatalError(string $message): ActionResultInterface
     {
         return new self(

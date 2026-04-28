@@ -2,6 +2,9 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses;
 
+use Mmt\TradingServiceSdk\WireHydration\Attributes\WireMapped;
+
+#[WireMapped]
 class SymbolItem
 {
     public function __construct(
@@ -14,7 +17,6 @@ class SymbolItem
         public readonly string $description,
     ) {}
 
-    
     public static function fromArray(array $data): self
     {
         return new self(

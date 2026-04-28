@@ -2,6 +2,9 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses;
 
+use Mmt\TradingServiceSdk\WireHydration\Attributes\WireMapped;
+
+#[WireMapped]
 final class SymbolsCategoryItem
 {
     public function __construct(

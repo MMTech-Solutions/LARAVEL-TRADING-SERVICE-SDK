@@ -9,7 +9,6 @@ use GuzzleHttp\Exception\RequestException;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportPacket;
-use Throwable;
 
 class TradingServiceHttpClient implements TransportInterface
 {
@@ -19,9 +18,9 @@ class TradingServiceHttpClient implements TransportInterface
     {
         $this->http = new Client([
             'base_uri' => config('laravel-trading-service-sdk.base_url'),
-            'headers'  => array_merge([
-                'Accept'        => 'application/json',
-                'Content-Type'  => 'application/json',
+            'headers' => array_merge([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
             ]),
         ]);
     }
@@ -43,7 +42,7 @@ class TradingServiceHttpClient implements TransportInterface
     }
 
     /**
-     * @param array<string, mixed> $metadata
+     * @param  array<string, mixed>  $metadata
      * @return array<string, mixed>
      */
     private function clientOptions(array $metadata, array $extra = []): array
@@ -56,7 +55,7 @@ class TradingServiceHttpClient implements TransportInterface
     }
 
     /**
-     * @param array<string, mixed> $metadata
+     * @param  array<string, mixed>  $metadata
      */
     private function get(string $uri, array $query = [], array $metadata = []): ActionResultInterface
     {
@@ -71,14 +70,13 @@ class TradingServiceHttpClient implements TransportInterface
 
         } catch (RequestException|ClientException $e) {
             return ResponseResult::fromErrorResponse($e->getResponse()->getBody()->getContents());
-        }
-        catch(ConnectException $e) {
+        } catch (ConnectException $e) {
             return ResponseResult::fromFatalError('Connection failed. Please check your internet connection and try again.');
         }
     }
 
     /**
-     * @param array<string, mixed> $metadata
+     * @param  array<string, mixed>  $metadata
      */
     private function post(string $uri, array $data = [], array $metadata = []): ActionResultInterface
     {
@@ -87,18 +85,18 @@ class TradingServiceHttpClient implements TransportInterface
             $response = $this->http->post($uri, $options);
 
             $strResponse = $response->getBody()->getContents();
+
             return ResponseResult::fromSuccessResponse($strResponse);
 
         } catch (RequestException|ClientException $e) {
             return ResponseResult::fromErrorResponse($e->getResponse()->getBody()->getContents());
-        }
-        catch(ConnectException $e) {
+        } catch (ConnectException $e) {
             return ResponseResult::fromFatalError('Connection failed. Please check your internet connection and try again.');
         }
     }
 
     /**
-     * @param array<string, mixed> $metadata
+     * @param  array<string, mixed>  $metadata
      */
     private function patch(string $uri, array $data = [], array $metadata = []): ActionResultInterface
     {
@@ -118,7 +116,7 @@ class TradingServiceHttpClient implements TransportInterface
      * Lista de escalares: repite la misma clave (login=1&login=2). Asociativo anidado: login[a]=….
      * Lista con elementos array: login[0][a]=….
      *
-     * @param array<string, mixed> $queryParams
+     * @param  array<string, mixed>  $queryParams
      */
     private function queryParamSerializer(array $queryParams): string
     {
@@ -131,7 +129,7 @@ class TradingServiceHttpClient implements TransportInterface
     }
 
     /**
-     * @param list<string> $parts
+     * @param  list<string>  $parts
      */
     private function appendQueryValue(array &$parts, string $key, mixed $value): void
     {
