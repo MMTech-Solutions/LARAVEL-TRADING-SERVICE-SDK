@@ -10,6 +10,8 @@ class BrokerConnectionResponse
     public function __construct(
         public readonly string $connection_id,
         public readonly string $broker_key,
+        /** Platform slug, e.g. "mt5". */
+        public readonly string $platform = '',
         /** Platform API URL prefix, e.g. "/v1/mt5". */
         public readonly string $platform_api_prefix = '',
         /** Broker key platform label, e.g. "MT5". */
