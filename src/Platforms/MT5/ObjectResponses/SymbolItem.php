@@ -10,11 +10,13 @@ class SymbolItem
     public function __construct(
         public readonly string $name,
         public readonly string $path,
-        public readonly int $volume_min,
-        public readonly int $contract_size,
-        public readonly int $volume_step,
+        /** Minimum volume in lots (float to support fractional lot sizes). */
+        public readonly float $volume_min,
+        public readonly float $contract_size,
+        /** Volume step in lots. */
+        public readonly float $volume_step,
         public readonly int $digits,
-        public readonly string $description,
+        public readonly string $description = '',
     ) {}
 
     public static function fromArray(array $data): self
@@ -26,7 +28,7 @@ class SymbolItem
             contract_size: $data['contract_size'],
             volume_step: $data['volume_step'],
             digits: $data['digits'],
-            description: $data['description'],
+            description: $data['description'] ?? '',
         );
     }
 }

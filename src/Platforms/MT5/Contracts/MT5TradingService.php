@@ -5,7 +5,8 @@ namespace Mmt\TradingServiceSdk\Platforms\MT5\Contracts;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\{
     ChangePasswordCommand, CheckPasswordCommand, CloseAllPositionsCommand, ClosePositionCommand, CreateUserCommand,
     GetDealsHistoryCommand, GetMarginLevelCommand, GetMarginLevelsCommand, GetOrdersByTicketsCommand, GetOrdersCommand,
-    GetPriceHistoryCommand, ListSymbolsCommand, ModifyPositionCommand, OpenPositionCommand, SetUserAccessCommand, TransactionCommand, UpdateUserCommand
+    GetPriceHistoryCommand, ListSymbolsCommand, ModifyPositionCommand, OpenPositionCommand, SetUserAccessCommand,
+    TransactionCommand, UpdateUserCommand, CancelAllOpenOrdersCommand, CloseAllTradingCommand
 };
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\{
     ActionResultInterface, TransportInterface, TransportPacket
@@ -341,6 +342,34 @@ class MT5TradingService implements MT5TradingServiceInterface
         }
 
         return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/transactions/set', $command->toArray());
+    }
+
+    public function cancelAllOpenOrders(CommandInterface $command): ActionResultInterface
+    {
+        if (! $command instanceof CancelAllOpenOrdersCommand) {
+            throw new InvalidArgumentException('Expected '.CancelAllOpenOrdersCommand::class);
+        }
+
+        return $this->sendPacket(
+            'post',
+            $this->url.'/'.$this->connectionId.'/orders/cancel-all',
+            $command->toArray(),
+            ['timeout' => 65.0]
+        );
+    }
+
+    public function closeAllTrading(CommandInterface $command): ActionResultInterface
+    {
+        if (! $command instanceof CloseAllTradingCommand) {
+            throw new InvalidArgumentException('Expected '.CloseAllTradingCommand::class);
+        }
+
+        return $this->sendPacket(
+            'post',
+            $this->url.'/'.$this->connectionId.'/trading/close-all',
+            $command->toArray(),
+            ['timeout' => self::TIMEOUT_CLOSE_ALL_POSITIONS]
+        );
     }
 
     private function encodePathSegment(string $value): string

@@ -6,10 +6,10 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\{
     ChangePasswordCommand, CheckPasswordCommand, CloseAllPositionsCommand, ClosePositionCommand, CreateUserCommand,
     GetDealsHistoryCommand, GetMarginLevelCommand, GetMarginLevelsCommand, GetOrdersByTicketsCommand, GetOrdersCommand,
     GetPriceHistoryCommand, ListSymbolsCommand, ModifyPositionCommand, ListUsersCommand, OpenPositionCommand,
-    SetUserAccessCommand, TransactionCommand, UpdateUserCommand
+    SetUserAccessCommand, TransactionCommand, UpdateUserCommand, CancelAllOpenOrdersCommand, CloseAllTradingCommand
 };
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\{
-    AccountStateItem, CloseAllPositionItem, DealItem, GroupItem,
+    AccountStateItem, CloseAllPositionItem, CloseAllTradingItem, DealItem, GroupItem,
     HierarchyGroupItem, MarginLevelItem, OpenPositionItem, OrderItem,
     PositionCloseItem, PositionItem, ServerTime, SymbolItem,
     TransactionItem, UserItem, PriceItem, PriceHistoryItem
@@ -229,4 +229,20 @@ interface MT5TradingServiceInterface
      * @return ActionResultInterface<HierarchyGroupItem[]>
      */
     public function getGroupHierarchy(): ActionResultInterface;
+
+    /**
+     * Cancel all open (pending) orders for a login. Does not close positions.
+     *
+     * @param CancelAllOpenOrdersCommand $command
+     * @return ActionResultInterface<string[]> Cancelled order ticket ids.
+     */
+    public function cancelAllOpenOrders(CommandInterface $command): ActionResultInterface;
+
+    /**
+     * Close all open positions and cancel all open orders for a login in parallel on the server.
+     *
+     * @param CloseAllTradingCommand $command
+     * @return ActionResultInterface<CloseAllTradingItem>
+     */
+    public function closeAllTrading(CommandInterface $command): ActionResultInterface;
 }

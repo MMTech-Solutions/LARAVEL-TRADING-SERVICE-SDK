@@ -20,7 +20,7 @@ class TransactionCommand implements CommandInterface
         $payload = [
             'login' => $this->login,
             'amount' => $this->amount,
-            'type' => $this->type->name,
+            'type' => $this->type->value,
             'comment' => $this->comment,
         ];
 

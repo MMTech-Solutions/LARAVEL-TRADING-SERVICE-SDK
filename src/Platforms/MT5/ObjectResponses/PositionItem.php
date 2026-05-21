@@ -5,64 +5,40 @@ namespace Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses;
 class PositionItem
 {
     public function __construct(
-        /**
-         * @var string ID del ticket de posición.
-         */
+        /** Position ticket id. */
         public string $id,
 
-        /**
-         * @var string Login de la cuenta (propietario de la posición).
-         */
+        /** Account login (position owner). */
         public string $login,
 
-        /**
-         * @var string Símbolo, por ejemplo "EURUSD".
-         */
+        /** Symbol, e.g. "EURUSD". */
         public string $symbol,
 
-        /**
-         * @var float Volumen en lotes.
-         */
+        /** Volume in lots. */
         public float $volume = 0.0,
 
-        /**
-         * @var float Precio de apertura.
-         */
+        /** Open price. */
         public float $open_price = 0.0,
 
-        /**
-         * @var float Precio actual.
-         */
+        /** Current market price. */
         public float $current_price = 0.0,
 
-        /**
-         * @var float Stop loss (0 = ninguno).
-         */
+        /** Stop loss (0 = none). */
         public float $sl = 0.0,
 
-        /**
-         * @var float Take profit (0 = ninguno).
-         */
+        /** Take profit (0 = none). */
         public float $tp = 0.0,
 
-        /**
-         * @var float Swap.
-         */
+        /** Swap. */
         public float $swap = 0.0,
 
-        /**
-         * @var float Ganancia/pérdida flotante.
-         */
+        /** Floating profit/loss. */
         public float $profit = 0.0,
 
-        /**
-         * @var string Comentario de la posición.
-         */
+        /** Position comment. */
         public string $comment = '',
 
-        /**
-         * @var string Hora de apertura ("TimeCreate") en UTC ISO 8601, ej. "2026-03-23T20:50:23Z".
-         */
+        /** Open time (TimeCreate) as UTC ISO 8601, e.g. "2026-03-23T20:50:23Z". */
         public string $time = ''
     ) {}
 }

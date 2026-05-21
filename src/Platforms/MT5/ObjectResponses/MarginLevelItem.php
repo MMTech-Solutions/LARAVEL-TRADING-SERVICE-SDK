@@ -13,6 +13,7 @@ class MarginLevelItem
         public float $margin_free = 0.0,
         public float $margin_level = 0.0,
         public int $leverage = 0,
-        public string $time = ''
+        /** Number of decimal digits for the account currency. */
+        public int $currency_digits = 0,
     ) {}
 }

@@ -2,9 +2,12 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\MT5\Enums;
 
-/** Serialized on the wire as JSON key "type". */
-enum TransactionTypeEnum: int
+/**
+ * Transaction type serialized on the wire as the JSON key "type".
+ * Values are sent as strings: "BALANCE" or "CREDIT".
+ */
+enum TransactionTypeEnum: string
 {
-    case BALANCE = 1;
-    case CREDIT = 2;
+    case BALANCE = 'BALANCE';
+    case CREDIT = 'CREDIT';
 }
