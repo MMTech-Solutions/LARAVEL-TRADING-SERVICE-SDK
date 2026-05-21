@@ -1,7 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
     "name": "mmt/laravel-trading-service-sdk",
-    "version": "1.1.3.0",
     "type": "library",
     "description": "Laravel SDK for interacting with the MMT Trading Service.",
     "keywords": ["mmt", "laravel", "trading", "sdk"],
