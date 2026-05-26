@@ -4,11 +4,21 @@ namespace Mmt\TradingServiceSdk\Platforms;
 
 class BrokerPasswordGenerator
 {
+    public static function generateRandomPasswordB2t(): string
+    {
+        return self::generateWithSpecialChars('!@#$%*');
+    }
+
     public static function generateRandomPassword(): string
+    {
+        return self::generateWithSpecialChars('!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~');
+    }
+
+    private static function generateWithSpecialChars(string $allowedSpecials) : string
     {
         // Genera una contraseña con al menos una letra minúscula, una letra mayúscula,
         // un número y un carácter especial permitido.
-        $allowedSpecials = '!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
+
         $specialChars = str_split($allowedSpecials);
 
         $lower = chr(random_int(97, 122)); // a-z

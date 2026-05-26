@@ -1,8 +1,8 @@
 <?php
 
-namespace Mmt\TradingServiceSdk\Platforms\Shared\Commands;
+namespace Mmt\TradingServiceSdk\Platforms\MT5\Commands;
 
-use Mmt\TradingServiceSdk\Contracts\CommandInterface;
+use Mmt\TradingServiceSdk\Contracts\ConnectCommandInterface;
 use Mmt\TradingServiceSdk\Enums\PlatformEnum;
 
 /**
@@ -11,7 +11,7 @@ use Mmt\TradingServiceSdk\Enums\PlatformEnum;
  * The platform is sent as a URL path segment (POST /v1/admin/brokers/connect/{platform}),
  * not in the request body.
  */
-class ConnectBrokerCommand implements CommandInterface
+class MT5ConnectCommand implements ConnectCommandInterface
 {
     public function __construct(
         public readonly string $server,

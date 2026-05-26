@@ -3,7 +3,7 @@
 namespace Mmt\TradingServiceSdk\Platforms;
 
 use Exception;
-use Mmt\TradingServiceSdk\Platforms\Shared\Commands\ConnectBrokerCommand;
+use Mmt\TradingServiceSdk\Contracts\ConnectCommandInterface;
 use Mmt\TradingServiceSdk\Platforms\Shared\ObjectResponses\BrokerConnectionResponse;
 use Mmt\TradingServiceSdk\Session\BrokerSession;
 use Mmt\TradingServiceSdk\Session\BrokerSessionInterface;
@@ -25,7 +25,7 @@ class TradingService
      *
      * @throws Exception If the connection fails.
      */
-    public function connect(ConnectBrokerCommand $command, ?string &$connectionId = null): BrokerSessionInterface
+    public function connect(ConnectCommandInterface $command, ?string &$connectionId = null): BrokerSessionInterface
     {
         $response = $this->createConnectionId($command);
 
@@ -78,7 +78,7 @@ class TradingService
      *
      * @return ActionResultInterface<BrokerConnectionResponse>
      */
-    private function createConnectionId(ConnectBrokerCommand $command): ActionResultInterface
+    private function createConnectionId(ConnectCommandInterface $command): ActionResultInterface
     {
         $platform = $command->platformSlug();
 
