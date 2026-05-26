@@ -179,7 +179,7 @@ La lista autoritativa de operaciones disponibles es **`B2TTradingServiceInterfac
 
 | Carpeta | Contenido |
 |---|---|
-| `DTOs/` | Entidades de dominio reutilizables: `Account`, `Position`, `Order`, `DealInfo`, `SymbolInfo`, `TickInfo`, `MarginLevel`, `UserProfile`, `GroupInfo`, `RoleInfo`, `LeverageProfile`, `AccountState`, `UserAccessData`, `ClosedPosition`, `BulkClosedPosition`, `TransactionHistoryItem` |
+| `DTOs/` | Entidades de dominio reutilizables: `Account`, `AccountState`, `Asset`, `BulkClosedPosition`, `ClosedPosition`, `DealInfo`, `GroupInfo`, `LeverageProfile`, `MarginLevel`, `Order`, `Position`, `RoleInfo`, `SymbolInfo`, `TickInfo`, `TransactionHistoryItem`, `UserAccessData`, `UserProfile` |
 | `ObjectResponses/` | Envoltorios de operación específicos (siempre con sufijo `Response`): `OpenPositionResponse`, `ClosePositionResponse`, `CloseAllPositionsResponse`, `ClosedPositionsResponse`, `GroupsResponse`, `AccountGroupResponse`, `AccountsByLoginResponse`, `AddBalanceResponse`, `SetBalanceResponse`, `ServerTimeResponse` |
 
 ## Estructura del código (resumen)
