@@ -77,6 +77,12 @@ class B2TTradingService implements B2TTradingServiceInterface
     }
 
     #[Override]
+    public function getUserByEmail(string $email): ActionResultInterface
+    {
+        return $this->get('users/by-email/'.$this->encodePathSegment($email));
+    }
+
+    #[Override]
     public function getUserAccess(string $user_id): ActionResultInterface
     {
         return $this->get("users/{$user_id}/access");

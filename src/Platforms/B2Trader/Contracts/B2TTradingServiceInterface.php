@@ -68,6 +68,11 @@ interface B2TTradingServiceInterface
         public function getUserByLogin(string $login): ActionResultInterface;
 
         /**
+         * @return ActionResultInterface<UserProfile>
+         */
+        public function getUserByEmail(string $email): ActionResultInterface;
+
+        /**
          * @return ActionResultInterface<UserAccessData>
          */
         public function getUserAccess(string $user_id): ActionResultInterface;
