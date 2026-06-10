@@ -2,7 +2,7 @@
 
 Cliente PHP (**SDK**) para Laravel que integra aplicaciones con el **MMT Trading Service**: operaciones de administración de brokers y de plataformas de trading (MT5, B2Trader y futuras) mediante una API tipada, sin acoplar el dominio de la aplicación a detalles HTTP.
 
-**Versión estable:** `2.0.0.0` (etiqueta Git `v2.0.0.0`). Release anterior: `v1.2.1.0`.
+**Versión estable:** `2.2.0.0` (etiqueta Git `v2.2.0.0`). Release anterior: `v2.1.0.0`.
 
 > **⚠ Breaking changes en v2.0.0.0** — Ver sección [Migración desde v1.x](#migración-desde-v1x).
 
@@ -76,16 +76,20 @@ $result = $mt5->listGroups();
 
 ```php
 use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\B2TConnectCommand;
-use Mmt\TradingServiceSdk\Enums\PlatformEnum;
 
 $session = $trading->connect(
     new B2TConnectCommand(
-        server: 'b2t.example.com',
+        server: 'https://bbp-ts-api.example.com',
         port: 443,
-        platform_type: PlatformEnum::B2T,
-        login: 'manager_login',
+        login: 'admin@example.com',
         password: 'secret',
-        name: 'Mi broker B2T',
+        name: 'my-broker-staging',
+        keycloak_url: 'https://sso.example.com/realms/b2broker/protocol/openid-connect/token',
+        bbp_client_id: 'bbp-client',
+        bbp_client_secret: 'client-secret',
+        history_base_url: 'https://bbp-ts-api.example.com',
+        default_transfer_asset_id: 'usd',
+        dss_ws_base_url: 'wss://bbp-dss-api.example.com',
     ),
     $connectionId
 );
@@ -244,6 +248,8 @@ Este repositorio usa etiquetas Git para releases públicas:
 | `v1.1.0.0` | Menor: `openPosition`, `LanguagesEnum` en usuarios, `getData(FQCN)` con mapeo a DTOs. |
 | `v1.2.1.0` | Menor: ajustes en MT5, `BrokerConnectionResponse` con campo `platform`. |
 | `v2.0.0.0` | **Breaking:** soporte B2Trader, `ConnectCommandInterface`, comandos de conexión por plataforma (`MT5ConnectCommand`, `B2TConnectCommand`), `BrokerSession::b2t()`, `PlatformEnum::B2T`. Eliminado `ConnectBrokerCommand`. |
+| `v2.1.0.0` | Menor: `getUserByEmail` B2Trader y ajustes menores. |
+| `v2.2.0.0` | **Breaking (B2T connect):** `B2TConnectCommand` payload alineado con Trading Service — eliminados `frontoffice_*` y `kafka_*`; añadido `dss_ws_base_url`; `keycloak_url`, `bbp_client_id`, `bbp_client_secret` requeridos; `fromArray()` añadido. |
 
 En la aplicación consumidora fija la dependencia a la etiqueta concreta (p. ej. `2.0.0.0`) o al criterio semver que uses internamente.
 
