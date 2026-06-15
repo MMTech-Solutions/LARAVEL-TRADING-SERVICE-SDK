@@ -58,6 +58,18 @@ class B2TTradingService implements B2TTradingServiceInterface
     }
 
     #[Override]
+    public function setAccountAccess(CommandInterface $command): ActionResultInterface
+    {
+        return $this->post('accounts/access', $command->toArray());
+    }
+
+    #[Override]
+    public function getAccountAccess(string $login): ActionResultInterface
+    {
+        return $this->get("accounts/{$this->encodePathSegment($login)}/access");
+    }
+
+    #[Override]
     public function getUsersByIds(string $user_id, string ...$user_ids): ActionResultInterface
     {
         $userIds = array_merge([$user_id], $user_ids);

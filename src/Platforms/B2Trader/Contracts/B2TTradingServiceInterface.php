@@ -9,10 +9,10 @@ use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\{
     CreateAccountCommand, CreateUserCommand,
     GetTransferHistoryCommand, GetClosedPositionsCommand, GetDealsHistoryCommand,
     GetGroupsCommand, GetOrdersCommand, GetTickRangeCommand,
-    OpenPositionCommand, TransactionCommand, UpdatePositionCommand
+    OpenPositionCommand, SetAccountAccessCommand, TransactionCommand, UpdatePositionCommand
 };
 use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\{
-    Account, AccountState, Asset, BulkClosedPosition, DealInfo, GroupInfo, LeverageProfile, MarginLevel, Order,
+    Account, AccountAccessData, AccountState, Asset, BulkClosedPosition, DealInfo, GroupInfo, LeverageProfile, MarginLevel, Order,
     Position, RoleInfo, SymbolInfo, TickInfo, TransactionHistoryItem, UserAccessData, UserProfile
 };
 use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\{
@@ -51,6 +51,17 @@ interface B2TTradingServiceInterface
          * @return ActionResultInterface<null>
          */
         public function setUserAccess(string $login, string $access): ActionResultInterface;
+
+        /**
+         * @param SetAccountAccessCommand $command
+         * @return ActionResultInterface<null>
+         */
+        public function setAccountAccess(CommandInterface $command): ActionResultInterface;
+
+        /**
+         * @return ActionResultInterface<AccountAccessData>
+         */
+        public function getAccountAccess(string $login): ActionResultInterface;
 
         /**
          * @return ActionResultInterface<UserProfile[]>

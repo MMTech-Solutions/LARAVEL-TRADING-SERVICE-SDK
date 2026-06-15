@@ -183,7 +183,7 @@ La lista autoritativa de operaciones disponibles es **`B2TTradingServiceInterfac
 
 | Carpeta | Contenido |
 |---|---|
-| `DTOs/` | Entidades de dominio reutilizables: `Account`, `AccountState`, `Asset`, `BulkClosedPosition`, `ClosedPosition`, `DealInfo`, `GroupInfo`, `LeverageProfile`, `MarginLevel`, `Order`, `Position`, `RoleInfo`, `SymbolInfo`, `TickInfo`, `TransactionHistoryItem`, `UserAccessData`, `UserProfile` |
+| `DTOs/` | Entidades de dominio reutilizables: `Account`, `AccountAccessData`, `AccountState`, `Asset`, `BulkClosedPosition`, `ClosedPosition`, `DealInfo`, `GroupInfo`, `LeverageProfile`, `MarginLevel`, `Order`, `Position`, `RoleInfo`, `SymbolInfo`, `TickInfo`, `TransactionHistoryItem`, `UserAccessData`, `UserProfile` |
 | `ObjectResponses/` | Envoltorios de operación específicos (siempre con sufijo `Response`): `OpenPositionResponse`, `ClosePositionResponse`, `CloseAllPositionsResponse`, `ClosedPositionsResponse`, `GroupsResponse`, `AccountGroupResponse`, `AccountsByLoginResponse`, `AddBalanceResponse`, `SetBalanceResponse`, `ServerTimeResponse` |
 
 ## Estructura del código (resumen)
@@ -250,6 +250,7 @@ Este repositorio usa etiquetas Git para releases públicas:
 | `v2.0.0.0` | **Breaking:** soporte B2Trader, `ConnectCommandInterface`, comandos de conexión por plataforma (`MT5ConnectCommand`, `B2TConnectCommand`), `BrokerSession::b2t()`, `PlatformEnum::B2T`. Eliminado `ConnectBrokerCommand`. |
 | `v2.1.0.0` | Menor: `getUserByEmail` B2Trader y ajustes menores. |
 | `v2.2.0.0` | **Breaking (B2T connect):** `B2TConnectCommand` payload alineado con Trading Service — eliminados `frontoffice_*` y `kafka_*`; añadido `dss_ws_base_url`; `keycloak_url`, `bbp_client_id`, `bbp_client_secret` requeridos; `fromArray()` añadido. |
+| `v2.3.0.0` | Menor: B2T `setAccountAccess` (`POST accounts/access`), `getAccountAccess` (`GET accounts/{login}/access`), `SetAccountAccessCommand`, DTO `AccountAccessData`. El endpoint legacy `setUserAccess` (`POST users/access`) se mantiene. |
 
 En la aplicación consumidora fija la dependencia a la etiqueta concreta (p. ej. `2.0.0.0`) o al criterio semver que uses internamente.
 
