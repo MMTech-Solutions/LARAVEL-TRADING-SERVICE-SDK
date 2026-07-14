@@ -10,5 +10,5 @@ class Asset
         public readonly string $scale,
         public readonly string $type,
         public readonly string $source
-    ){}
+    ) {}
 }

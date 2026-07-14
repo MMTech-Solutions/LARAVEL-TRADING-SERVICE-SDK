@@ -11,7 +11,7 @@ class GetOrdersCommand implements CommandInterface
         public string $login,
         public ?string $from_timestamp = null,
         public ?string $to_timestamp = null
-    ){}
+    ) {}
 
     #[Override]
     public function toArray(): array
@@ -19,9 +19,9 @@ class GetOrdersCommand implements CommandInterface
         $payload = [
             'login' => $this->login,
             'from_timestamp' => $this->from_timestamp,
-            'to_timestamp' => $this->to_timestamp
+            'to_timestamp' => $this->to_timestamp,
         ];
 
-        return array_filter($payload, fn($v) => ! is_null($v));
+        return array_filter($payload, fn ($v) => ! is_null($v));
     }
 }

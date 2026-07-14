@@ -10,7 +10,7 @@ use Attribute;
  * the class is not wire-mapped as a whole).
  *
  * @property string|null $wireKey When set, the value is read from this key in the decoded array; when
- *                            null, the source key is the property's name in PHP.
+ *                                null, the source key is the property's name in PHP.
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY)]
 final class WireMapped

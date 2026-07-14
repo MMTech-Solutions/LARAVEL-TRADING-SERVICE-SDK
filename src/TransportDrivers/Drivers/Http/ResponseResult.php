@@ -49,7 +49,7 @@ class ResponseResult implements ActionResultInterface
             return null;
         }
 
-        return (new WireHydrator)->hydrate($this->data, $castToFqcn);
+        return (new WireHydrator())->hydrate($this->data, $castToFqcn);
     }
 
     public function isSuccess(): bool

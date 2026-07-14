@@ -4,5 +4,5 @@ namespace Mmt\TradingServiceSdk\Contracts;
 
 interface ConnectCommandInterface extends CommandInterface
 {
-    public function platformSlug() : string;
+    public function platformSlug(): string;
 }

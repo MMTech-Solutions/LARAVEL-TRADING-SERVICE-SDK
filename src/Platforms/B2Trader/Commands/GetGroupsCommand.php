@@ -11,7 +11,7 @@ final class GetGroupsCommand implements CommandInterface
         public readonly string $user_id,
         public readonly ?int $limit = null,
         public readonly ?int $offset = null,
-    ){}
+    ) {}
 
     #[Override]
     public function toArray(): array
@@ -19,9 +19,9 @@ final class GetGroupsCommand implements CommandInterface
         $payload = [
             'user_id' => $this->user_id,
             'limit' => $this->limit,
-            'offset' => $this->offset
+            'offset' => $this->offset,
         ];
 
-        return array_filter($payload, fn($v) => ! is_null($v));
+        return array_filter($payload, fn ($v) => ! is_null($v));
     }
 }

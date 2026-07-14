@@ -12,8 +12,7 @@ enum PlatformEnum: int
 
     public static function tryFromString(string $platform): self
     {
-        return match(strtolower($platform))
-        {
+        return match (strtolower($platform)) {
             'mt5' => self::MT5,
             'b2t' => self::B2T,
             default => throw new PlatformNotSupportedException(),
@@ -23,12 +22,12 @@ enum PlatformEnum: int
     /** @deprecated Use toLowerCases instead */
     public static function toLowerString(): array
     {
-        return array_map(fn(self $platform) => strtolower($platform->name), self::cases());
+        return array_map(fn (self $platform) => strtolower($platform->name), self::cases());
     }
 
     public static function toLowerCases(): array
     {
-        return array_map(fn(self $platform) => strtolower($platform->name), self::cases());
+        return array_map(fn (self $platform) => strtolower($platform->name), self::cases());
     }
 
     public function toLowerCase(): string
@@ -43,7 +42,7 @@ enum PlatformEnum: int
 
     public static function serialized(): array
     {
-        return array_map(fn(self $platform) => [
+        return array_map(fn (self $platform) => [
             'name' => $platform->name,
             'label' => $platform->label(),
             'value' => $platform->value,

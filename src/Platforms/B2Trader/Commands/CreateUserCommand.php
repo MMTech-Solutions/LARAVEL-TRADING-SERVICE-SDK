@@ -17,7 +17,7 @@ class CreateUserCommand implements CommandInterface
         return [
             'email' => $this->email,
             'password' => $this->password,
-            'role_id' => $this->roleId
+            'role_id' => $this->roleId,
         ];
     }
 }

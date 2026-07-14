@@ -11,7 +11,7 @@ final class GetTransferHistoryCommand implements CommandInterface
         public int $offset,
         public int $status,
     ) {}
-    
+
     public function toArray(): array
     {
         return [

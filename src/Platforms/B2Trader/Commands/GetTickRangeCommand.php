@@ -11,7 +11,7 @@ class GetTickRangeCommand implements CommandInterface
         public readonly int $from_ts,
         public readonly int $to_ts,
         public readonly ?int $limit = null,
-    ){}
+    ) {}
 
     #[Override]
     public function toArray(): array
@@ -19,9 +19,9 @@ class GetTickRangeCommand implements CommandInterface
         $payload = [
             'from_ts' => $this->from_ts,
             'to_ts' => $this->to_ts,
-            'limit' => $this->limit
+            'limit' => $this->limit,
         ];
 
-        return array_filter($payload, fn($v) => !is_null($v));
+        return array_filter($payload, fn ($v) => ! is_null($v));
     }
 }

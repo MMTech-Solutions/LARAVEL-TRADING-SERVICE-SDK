@@ -7,7 +7,7 @@ use Mmt\TradingServiceSdk\Contracts\CommandInterface;
 class GetMarginLevelsCommand implements CommandInterface
 {
     /**
-     * @param string[] $logins
+     * @param  string[]  $logins
      */
     public function __construct(
         public array $logins,

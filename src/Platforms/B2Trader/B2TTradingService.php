@@ -6,7 +6,6 @@ use Mmt\TradingServiceSdk\Contracts\CommandInterface;
 use Mmt\TradingServiceSdk\Enums\PlatformEnum;
 use Mmt\TradingServiceSdk\Platforms\B2Trader\Contracts\B2TTradingServiceInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
-use Mmt\TradingServiceSdk\TransportDrivers\Contracts\TransportInterface;
 use Mmt\TradingServiceSdk\TransportDrivers\Traits\WithHttpClient;
 use Override;
 
@@ -26,7 +25,7 @@ class B2TTradingService implements B2TTradingServiceInterface
         $platform = PlatformEnum::B2T->toLowerCase();
         $this->setBaseUrl("/v1/{$platform}/connections/{$this->connectionId}");
     }
-    
+
     #[Override]
     public function getServerTime(): ActionResultInterface
     {
@@ -73,6 +72,7 @@ class B2TTradingService implements B2TTradingServiceInterface
     public function getUsersByIds(string $user_id, string ...$user_ids): ActionResultInterface
     {
         $userIds = array_merge([$user_id], $user_ids);
+
         return $this->get('users/query', ['user_ids' => $userIds]);
     }
 
@@ -116,13 +116,14 @@ class B2TTradingService implements B2TTradingServiceInterface
     public function getMarginLevels(string $login, string ...$logins): ActionResultInterface
     {
         $_logins = array_merge([$login], $logins);
-        return $this->get("users/margins", $_logins);
+
+        return $this->get('users/margins', $_logins);
     }
 
     #[Override]
     public function getMarginLevelsWithOpenPositions(): ActionResultInterface
     {
-        return $this->get("users/margins-by-open-positions");
+        return $this->get('users/margins-by-open-positions');
     }
 
     #[Override]
@@ -147,20 +148,22 @@ class B2TTradingService implements B2TTradingServiceInterface
     public function getAccounts(string $login, string ...$logins): ActionResultInterface
     {
         $_logins = array_merge([$login], $logins);
-        return $this->get("accounts/query", $_logins);
+
+        return $this->get('accounts/query', $_logins);
     }
 
     #[Override]
     public function getAccountsByUserIds(string $user_id, string ...$user_ids): ActionResultInterface
     {
         $_userIds = array_merge([$user_id], $user_ids);
-        return $this->get("users/accounts/query", $_userIds);
+
+        return $this->get('users/accounts/query', $_userIds);
     }
 
     #[Override]
     public function closePositionsAndCancelOpenOrders(string $login, ?string $symbolFilter = null): ActionResultInterface
     {
-        return $this->post("trading/close-all", ['login' => $login, 'symbol_filter' => $symbolFilter]);
+        return $this->post('trading/close-all', ['login' => $login, 'symbol_filter' => $symbolFilter]);
     }
 
     #[Override]
@@ -172,13 +175,13 @@ class B2TTradingService implements B2TTradingServiceInterface
     #[Override]
     public function addBalance(CommandInterface $command): ActionResultInterface
     {
-        return $this->post("transactions/change", $command->toArray());
+        return $this->post('transactions/change', $command->toArray());
     }
 
     #[Override]
     public function setBalance(CommandInterface $command): ActionResultInterface
     {
-        return $this->post("transactions/set", $command->toArray());
+        return $this->post('transactions/set', $command->toArray());
     }
 
     #[Override]
@@ -196,12 +199,12 @@ class B2TTradingService implements B2TTradingServiceInterface
     #[Override]
     public function getClosedPositions(string $login, ?CommandInterface $command = null): ActionResultInterface
     {
-        return $this->get("positions/closed", ['login' => $login, 'command' => $command?->toArray() ?? []]);
+        return $this->get('positions/closed', ['login' => $login, 'command' => $command?->toArray() ?? []]);
     }
 
     public function getPositions(string $login): ActionResultInterface
     {
-        return $this->get("positions", ['login' => $login]);
+        return $this->get('positions', ['login' => $login]);
     }
 
     #[Override]
@@ -213,7 +216,7 @@ class B2TTradingService implements B2TTradingServiceInterface
     #[Override]
     public function openPosition(CommandInterface $command): ActionResultInterface
     {
-        return $this->post("positions/execute", $command->toArray());
+        return $this->post('positions/execute', $command->toArray());
     }
 
     #[Override]
@@ -250,6 +253,7 @@ class B2TTradingService implements B2TTradingServiceInterface
     public function getOrdersByTickets(string $order_id, string ...$order_ids): ActionResultInterface
     {
         $_orderIds = array_merge([$order_id], $order_ids);
+
         return $this->get('orders/by-tickets', ['order_ids' => $_orderIds]);
     }
 
@@ -333,7 +337,7 @@ class B2TTradingService implements B2TTradingServiceInterface
     #[Override]
     public function getGroups(CommandInterface $command): ActionResultInterface
     {
-        return $this->get("groups", $command->toArray());
+        return $this->get('groups', $command->toArray());
     }
 
     #[Override]

@@ -8,12 +8,12 @@ class ListUsersCommand implements CommandInterface
 {
     public function __construct(
         public string $groupName
-    ){}
+    ) {}
 
     public function toArray(): array
     {
         return [
-            'group_filter' => $this->groupName
+            'group_filter' => $this->groupName,
         ];
     }
 }

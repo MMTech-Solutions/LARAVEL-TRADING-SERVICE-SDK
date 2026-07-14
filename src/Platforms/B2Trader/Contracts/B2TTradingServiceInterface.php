@@ -2,24 +2,49 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\B2Trader\Contracts;
 
-use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
 use Mmt\TradingServiceSdk\Contracts\CommandInterface;
-use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\{
-    ChangePasswordCommand, ClosePositionCommand,
-    CreateAccountCommand, CreateUserCommand,
-    GetTransferHistoryCommand, GetClosedPositionsCommand, GetDealsHistoryCommand,
-    GetGroupsCommand, GetOrdersCommand, GetTickRangeCommand,
-    OpenPositionCommand, SetAccountAccessCommand, TransactionCommand, UpdatePositionCommand
-};
-use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\{
-    Account, AccountAccessData, AccountState, Asset, BulkClosedPosition, DealInfo, GroupInfo, LeverageProfile, MarginLevel, Order,
-    Position, RoleInfo, SymbolInfo, TickInfo, TransactionHistoryItem, UserAccessData, UserProfile
-};
-use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\{
-    AccountGroupResponse, AccountsByLoginResponse, AddBalanceResponse, CloseAllPositionsResponse,
-    ClosedPositionsResponse, ClosePositionResponse, GroupsResponse, OpenPositionResponse,
-    ServerTimeResponse, SetBalanceResponse
-};
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\ChangePasswordCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\ClosePositionCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\CreateAccountCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\CreateUserCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\GetClosedPositionsCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\GetDealsHistoryCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\GetGroupsCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\GetOrdersCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\GetTickRangeCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\GetTransferHistoryCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\OpenPositionCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\SetAccountAccessCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\TransactionCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\Commands\UpdatePositionCommand;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\Account;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\AccountAccessData;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\AccountState;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\Asset;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\BulkClosedPosition;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\DealInfo;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\GroupInfo;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\LeverageProfile;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\MarginLevel;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\Order;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\Position;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\RoleInfo;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\SymbolInfo;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\TickInfo;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\TransactionHistoryItem;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\UserAccessData;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\UserProfile;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\AccountGroupResponse;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\AccountsByLoginResponse;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\AddBalanceResponse;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\CloseAllPositionsResponse;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\ClosedPositionsResponse;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\ClosePositionResponse;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\GroupsResponse;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\OpenPositionResponse;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\ServerTimeResponse;
+use Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses\SetBalanceResponse;
+use Mmt\TradingServiceSdk\TransportDrivers\Contracts\ActionResultInterface;
 
 interface B2TTradingServiceInterface
 {

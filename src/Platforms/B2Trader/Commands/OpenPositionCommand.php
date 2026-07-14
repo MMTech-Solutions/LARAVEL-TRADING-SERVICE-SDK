@@ -16,7 +16,7 @@ class OpenPositionCommand implements CommandInterface
         public readonly float $sl,
         public readonly float $tp,
         public readonly ?string $comment = null
-    ){}
+    ) {}
 
     #[Override]
     public function toArray(): array

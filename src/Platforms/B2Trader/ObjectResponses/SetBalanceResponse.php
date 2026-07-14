@@ -17,6 +17,5 @@ class SetBalanceResponse
         public readonly array $transfer,
         public readonly bool $confirmed,
         public readonly ?string $note = null,
-    ) {
-    }
+    ) {}
 }

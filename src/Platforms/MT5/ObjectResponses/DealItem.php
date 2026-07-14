@@ -2,6 +2,10 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses;
 
+use Mmt\TradingServiceSdk\WireHydration\Attributes\WireMapped;
+
+
+#[WireMapped]
 final class DealItem
 {
     public function __construct(
@@ -16,13 +20,13 @@ final class DealItem
         /** Symbol (e.g. EURUSD). */
         public string $symbol,
         /** Volume in lots. */
-        public float $volume = 0,
+        public float $volume,
         /** Deal price. */
-        public float $price = 0,
+        public float $price,
         /** Profit/loss. */
-        public float $profit = 0,
+        public float $profit,
         /** Deal time (Unix timestamp). */
-        public int $time = 0,
+        public int $time,
         /** Deal type. */
         public string $type,
         /** Entry (in/out). */

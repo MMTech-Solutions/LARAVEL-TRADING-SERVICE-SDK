@@ -7,7 +7,7 @@ use Mmt\TradingServiceSdk\Contracts\CommandInterface;
 class GetOrdersByTicketsCommand implements CommandInterface
 {
     /**
-     * @param string[] $order_ids
+     * @param  string[]  $order_ids
      */
     public function __construct(
         public array $order_ids,

@@ -13,5 +13,5 @@ class Order
         public readonly string $time,
         public readonly string $type,
         public readonly string $state,
-    ){}
+    ) {}
 }

@@ -10,5 +10,5 @@ class ClosePositionResponse
         public readonly float $volume,
         public readonly string $deal_id,
         public readonly string $position_id
-    ){}
+    ) {}
 }

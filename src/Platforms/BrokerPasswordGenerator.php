@@ -14,7 +14,7 @@ class BrokerPasswordGenerator
         return self::generateWithSpecialChars('!\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~');
     }
 
-    private static function generateWithSpecialChars(string $allowedSpecials) : string
+    private static function generateWithSpecialChars(string $allowedSpecials): string
     {
         // Genera una contraseña con al menos una letra minúscula, una letra mayúscula,
         // un número y un carácter especial permitido.

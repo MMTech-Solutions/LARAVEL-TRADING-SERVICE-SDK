@@ -5,18 +5,17 @@ namespace Mmt\TradingServiceSdk\Platforms\MT5\Commands;
 use Mmt\TradingServiceSdk\Contracts\CommandInterface;
 use Mmt\TradingServiceSdk\Enums\LanguagesEnum;
 
-
 /**
  * @template T of CommandInterface
  */
 class CreateUserCommand implements CommandInterface
 {
     public function __construct(
-        public string  $password,
-        public string  $password_investor,
-        public string  $group,
-        public string  $email,
-        public int     $leverage,
+        public string $password,
+        public string $password_investor,
+        public string $group,
+        public string $email,
+        public int $leverage,
         public ?string $login = null,
         public ?string $agent_account = null,
         public ?string $first_name = null,
@@ -31,7 +30,7 @@ class CreateUserCommand implements CommandInterface
         public ?string $phone = null,
         public ?string $comment = null,
     ) {}
- 
+
     public function toArray(): array
     {
         $payload = [
@@ -57,7 +56,7 @@ class CreateUserCommand implements CommandInterface
 
         // Filter out properties with null values
         return array_filter($payload, function ($value) {
-            return !is_null($value);
+            return ! is_null($value);
         });
 
     }

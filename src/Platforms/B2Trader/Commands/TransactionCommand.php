@@ -11,7 +11,7 @@ class TransactionCommand implements CommandInterface
         public readonly float $amount,
         public readonly string $asset_id,
         public readonly ?string $comment = null,
-    ){}
+    ) {}
 
     public function toArray(): array
     {

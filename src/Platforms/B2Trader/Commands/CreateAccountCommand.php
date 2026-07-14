@@ -11,7 +11,7 @@ final class CreateAccountCommand implements CommandInterface
         public string $group_id,
         public string $name,
         public string $type
-    ){}
+    ) {}
 
     #[Override]
     public function toArray(): array
@@ -19,7 +19,7 @@ final class CreateAccountCommand implements CommandInterface
         return [
             'group_id' => $this->group_id,
             'name' => $this->name,
-            'type' => $this->type
+            'type' => $this->type,
         ];
     }
 }

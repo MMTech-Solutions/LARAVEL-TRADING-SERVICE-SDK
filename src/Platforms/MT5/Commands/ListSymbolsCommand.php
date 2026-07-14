@@ -8,7 +8,7 @@ class ListSymbolsCommand implements CommandInterface
 {
     public function __construct(
         public string $groupName
-    ){}
+    ) {}
 
     public function toArray(): array
     {

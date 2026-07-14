@@ -11,7 +11,7 @@ final class CheckPasswordCommand implements CommandInterface
         public readonly string $login,
         public readonly string $password,
         public readonly bool $is_investor,
-    ){}
+    ) {}
 
     #[Override]
     public function toArray(): array
@@ -19,7 +19,7 @@ final class CheckPasswordCommand implements CommandInterface
         return [
             'login' => $this->login,
             'password' => $this->password,
-            'is_investor' => $this->is_investor
+            'is_investor' => $this->is_investor,
         ];
     }
 }

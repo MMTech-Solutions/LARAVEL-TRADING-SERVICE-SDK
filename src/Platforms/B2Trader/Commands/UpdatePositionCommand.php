@@ -13,7 +13,7 @@ class UpdatePositionCommand implements CommandInterface
         public readonly float $sl,
         /** New Take Profit (0 = remove). */
         public readonly float $tp
-    ){}
+    ) {}
 
     #[Override]
     public function toArray(): array
@@ -21,7 +21,7 @@ class UpdatePositionCommand implements CommandInterface
         return [
             'position_id' => $this->position_id,
             'sl' => $this->sl,
-            'tp' => $this->tp
+            'tp' => $this->tp,
         ];
     }
 }

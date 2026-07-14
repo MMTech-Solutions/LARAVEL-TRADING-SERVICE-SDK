@@ -14,7 +14,7 @@ enum AccessLevelEnum: int
      */
     public static function lowerCases(): array
     {
-        return array_map(fn(AccessLevelEnum $level) => strtolower($level->name), self::cases());
+        return array_map(fn (AccessLevelEnum $level) => strtolower($level->name), self::cases());
     }
 
     public function labelToLowerString(): string

@@ -30,7 +30,7 @@ class ExecutePerpetualOrderCommand implements CommandInterface
 
         /** Multiplicador de apalancamiento */
         public int $leverage,
-        
+
         /** Comentario opcional */
         public ?string $comment = null,
     ) {}

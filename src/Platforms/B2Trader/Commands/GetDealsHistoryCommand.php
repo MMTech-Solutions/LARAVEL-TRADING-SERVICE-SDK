@@ -11,7 +11,7 @@ class GetDealsHistoryCommand implements CommandInterface
         public readonly string $login,
         public readonly ?int $from_timestamp = null,
         public readonly ?int $to_timestamp = null,
-    ){}
+    ) {}
 
     #[Override]
     public function toArray(): array
@@ -22,6 +22,6 @@ class GetDealsHistoryCommand implements CommandInterface
             'to_timestamp' => $this->to_timestamp,
         ];
 
-        return array_filter($payload, fn($v) => ! is_null($v));
+        return array_filter($payload, fn ($v) => ! is_null($v));
     }
 }

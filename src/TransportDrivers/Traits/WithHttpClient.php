@@ -19,13 +19,13 @@ trait WithHttpClient
         return rawurlencode($value);
     }
 
-    private function setBaseUrl(string $url) : void
+    private function setBaseUrl(string $url): void
     {
         $this->baseUrl = $url;
     }
 
     /**
-     * @param array<string, mixed> $metadata
+     * @param  array<string, mixed>  $metadata
      */
     private function request(string $method, string $url, array $payload = [], array $metadata = []): ActionResultInterface
     {
@@ -41,18 +41,21 @@ trait WithHttpClient
     private function post(string $url, array $payload = [], array $metadata = []): ActionResultInterface
     {
         $uri = $this->buildUrl($url);
+
         return $this->request('post', $uri, $payload, $metadata);
     }
 
     private function get(string $url, array $payload = [], array $metadata = []): ActionResultInterface
     {
         $uri = $this->buildUrl($url);
+
         return $this->request('get', $uri, $payload, $metadata);
     }
 
     private function patch(string $url, array $payload = [], array $metadata = [])
     {
         $uri = $this->buildUrl($url);
+
         return $this->request('patch', $uri, $payload, $metadata);
     }
 
@@ -62,7 +65,7 @@ trait WithHttpClient
 
         $url = $this->baseUrl;
 
-        foreach($allParams as $_param) {
+        foreach ($allParams as $_param) {
             $url .= "/{$_param}";
         }
 

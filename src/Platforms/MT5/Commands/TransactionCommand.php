@@ -24,6 +24,6 @@ class TransactionCommand implements CommandInterface
             'comment' => $this->comment,
         ];
 
-        return array_filter($payload, fn ($v) => !is_null($v));
+        return array_filter($payload, fn ($v) => ! is_null($v));
     }
 }

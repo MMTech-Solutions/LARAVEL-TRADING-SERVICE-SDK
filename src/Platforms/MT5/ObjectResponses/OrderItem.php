@@ -12,9 +12,9 @@ final class OrderItem
         /** Symbol (e.g. EURUSD). */
         public string $symbol,
         /** Initial order volume in lots (MT5: IMTOrder.VolumeInitial). */
-        public float $volume = 0,
+        public float $volume,
         /** Order price. */
-        public float $price = 0,
+        public float $price,
         /** Order creation / placement (TimeSetup) as UTC ISO 8601, e.g. "2026-03-23T20:50:23Z". */
         public string $time,
         /** Order type. */

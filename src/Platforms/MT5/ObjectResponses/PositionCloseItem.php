@@ -8,9 +8,9 @@ final class PositionCloseItem
         /** Close order ticket id. */
         public string $order_id,
         /** Close price. */
-        public float $price = 0,
+        public float $price,
         /** Closed volume in lots. */
-        public float $volume = 0,
+        public float $volume,
         /** Deal ticket id. */
         public string $deal_id,
         /** Position ticket id that was closed. */

@@ -2,6 +2,9 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses;
 
+use Mmt\TradingServiceSdk\WireHydration\Attributes\WireMapped;
+
+#[WireMapped]
 class PositionItem
 {
     public function __construct(
@@ -39,6 +42,9 @@ class PositionItem
         public string $comment = '',
 
         /** Open time (TimeCreate) as UTC ISO 8601, e.g. "2026-03-23T20:50:23Z". */
-        public string $time = ''
+        public string $time = '',
+
+        /** Close time when provided by the bridge (open positions usually omit this). */
+        public ?string $close_time = null,
     ) {}
 }

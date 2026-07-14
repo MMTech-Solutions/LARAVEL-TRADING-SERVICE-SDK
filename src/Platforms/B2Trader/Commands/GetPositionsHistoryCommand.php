@@ -11,7 +11,7 @@ class GetPositionsHistoryCommand implements CommandInterface
         public readonly string $created_from,
         public readonly string $created_to,
         public readonly string $last_id,
-    ){}
+    ) {}
 
     public function toArray(): array
     {

@@ -11,5 +11,5 @@ class OpenPositionResponse
         public readonly string $action,
         public readonly string $user_id,
         public readonly string $order_index,
-    ){}
+    ) {}
 }

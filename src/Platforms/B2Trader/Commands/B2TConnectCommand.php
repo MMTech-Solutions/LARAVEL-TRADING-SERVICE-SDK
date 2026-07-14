@@ -25,6 +25,14 @@ class B2TConnectCommand implements ConnectCommandInterface
         public readonly string $history_base_url,
         public readonly string $default_transfer_asset_id,
         public readonly string $dss_ws_base_url,
+        public readonly string $kafka_bootstrap_servers,
+        public readonly string $kafka_security_protocol,
+        public readonly string $kafka_sasl_mechanism,
+        public readonly string $kafka_username,
+        public readonly string $kafka_password,
+        public readonly string $kafka_external_events_topic,
+        public readonly string $kafka_consumer_group_id_prefix,
+        public readonly string $kafka_auto_offset_reset,
     ) {}
 
     public static function fromArray(array $data): self
@@ -41,6 +49,14 @@ class B2TConnectCommand implements ConnectCommandInterface
             history_base_url: $data['history_base_url'],
             default_transfer_asset_id: $data['default_transfer_asset_id'],
             dss_ws_base_url: $data['dss_ws_base_url'],
+            kafka_bootstrap_servers: $data['kafka_bootstrap_servers'],
+            kafka_security_protocol: $data['kafka_security_protocol'],
+            kafka_sasl_mechanism: $data['kafka_sasl_mechanism'],
+            kafka_username: $data['kafka_username'],
+            kafka_password: $data['kafka_password'],
+            kafka_external_events_topic: $data['kafka_external_events_topic'],
+            kafka_consumer_group_id_prefix: $data['kafka_consumer_group_id_prefix'],
+            kafka_auto_offset_reset: $data['kafka_auto_offset_reset'],
         );
     }
 
@@ -59,6 +75,14 @@ class B2TConnectCommand implements ConnectCommandInterface
             'history_base_url' => $this->history_base_url,
             'default_transfer_asset_id' => $this->default_transfer_asset_id,
             'dss_ws_base_url' => $this->dss_ws_base_url,
+            'kafka_bootstrap_servers' => $this->kafka_bootstrap_servers,
+            'kafka_security_protocol' => $this->kafka_security_protocol,
+            'kafka_sasl_mechanism' => $this->kafka_sasl_mechanism,
+            'kafka_username' => $this->kafka_username,
+            'kafka_password' => $this->kafka_password,
+            'kafka_external_events_topic' => $this->kafka_external_events_topic,
+            'kafka_consumer_group_id_prefix' => $this->kafka_consumer_group_id_prefix,
+            'kafka_auto_offset_reset' => $this->kafka_auto_offset_reset,
         ];
     }
 
