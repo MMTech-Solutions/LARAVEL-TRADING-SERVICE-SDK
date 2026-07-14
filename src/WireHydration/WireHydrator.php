@@ -165,10 +165,13 @@ class WireHydrator
         return $this->normalizeScalarOrObject($raw, $type);
     }
 
+    private const BUILTIN_DOC_TYPES = [
+        'string', 'int', 'float', 'bool', 'array', 'object', 'mixed',
+        'iterable', 'callable', 'null', 'false', 'true', 'never', 'void',
+    ];
+
     private function hydrateArrayProperty(mixed $raw, ReflectionProperty $property): array
     {
-        $type = $property->getType();
-
         if ($raw === null) {
             return [];
         }
@@ -177,10 +180,21 @@ class WireHydrator
             throw new InvalidArgumentException(sprintf('Expected array for %s::$%s.', $property->getDeclaringClass()->getName(), $property->getName()));
         }
 
-        $elementClass = $this->arrayElementClassFromDocblock($property);
+        $elementType = $this->arrayElementTypeFromDocblock($property);
 
-        if ($elementClass === null) {
+        if ($elementType === null) {
             return $raw;
+        }
+
+        if ($this->isBuiltinDocType($elementType)) {
+            if (! array_is_list($raw)) {
+                return $raw;
+            }
+
+            return array_map(
+                fn (mixed $item) => $this->coerceBuiltin($item, $elementType),
+                $raw
+            );
         }
 
         if (array_is_list($raw)) {
@@ -189,7 +203,7 @@ class WireHydrator
                 if (! is_array($item)) {
                     throw new InvalidArgumentException(sprintf('List elements for %s::$%s must be arrays.', $property->getDeclaringClass()->getName(), $property->getName()));
                 }
-                $items[] = $this->hydrateObject($item, $elementClass);
+                $items[] = $this->hydrateObject($item, $elementType);
             }
 
             return $items;
@@ -199,11 +213,11 @@ class WireHydrator
     }
 
     /**
-     * Parses `@var Foo[]` or `\Full\Foo[]`.
+     * Parses `@var Foo[]`, `@var string[]`, or `\Full\Foo[]`.
      *
-     * @return class-string|null
+     * @return class-string|string|null Builtin name, FQCN, or null when undocumented.
      */
-    private function arrayElementClassFromDocblock(ReflectionProperty $property): ?string
+    private function arrayElementTypeFromDocblock(ReflectionProperty $property): ?string
     {
         $doc = $property->getDocComment();
         if ($doc === false || $doc === '') {
@@ -215,6 +229,10 @@ class WireHydrator
         }
 
         $name = $matches[1];
+
+        if ($this->isBuiltinDocType($name)) {
+            return $name;
+        }
 
         if (str_starts_with($name, '\\')) {
             /** @var class-string $fqcn */
@@ -229,6 +247,11 @@ class WireHydrator
         $fqcn = $namespace.'\\'.$name;
 
         return $fqcn;
+    }
+
+    private function isBuiltinDocType(string $name): bool
+    {
+        return in_array(ltrim(strtolower($name), '\\'), self::BUILTIN_DOC_TYPES, true);
     }
 
     private function normalizeScalarOrObject(mixed $raw, ReflectionType $type): mixed

@@ -2,8 +2,9 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses;
 
-use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\ClosedPosition;
+use Mmt\TradingServiceSdk\WireHydration\Attributes\WireMapped;
 
+#[WireMapped]
 class ClosedPositionsResponse
 {
     public function __construct(
@@ -14,7 +15,7 @@ class ClosedPositionsResponse
         public string $closed_from,
         public string $closed_to,
         public int $count,
-        /** @var ClosedPosition[] */
+        /** @var \Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\ClosedPosition[] */
         public array $positions,
     ) {}
 }

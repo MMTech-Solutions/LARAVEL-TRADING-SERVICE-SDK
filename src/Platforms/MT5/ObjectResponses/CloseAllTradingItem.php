@@ -2,11 +2,14 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses;
 
+use Mmt\TradingServiceSdk\WireHydration\Attributes\WireMapped;
+
 /**
  * Response for POST /trading/close-all.
  *
  * Contains closed positions and cancelled order ticket ids.
  */
+#[WireMapped]
 final class CloseAllTradingItem
 {
     public function __construct(

@@ -19,6 +19,8 @@ interface ActionResultInterface
     public function getMessage(): ?string;
 
     /**
+     * @deprecated Use {@see getMappedData()} with {@see WireMapped} instead.
+     *
      * @param  class-string<T>|null  $castToFqcn
      * @return T
      */

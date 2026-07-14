@@ -26,6 +26,9 @@ class ResponseResult implements ActionResultInterface
         return $this->message;
     }
 
+    /**
+     * @deprecated Use {@see getMappedData()} with {@see WireMapped} instead.
+     */
     public function getData(?string $castToFqcn = null): mixed
     {
         if ($castToFqcn && isset($this->data)) {

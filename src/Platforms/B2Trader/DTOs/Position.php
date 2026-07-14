@@ -2,6 +2,9 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs;
 
+use Mmt\TradingServiceSdk\WireHydration\Attributes\WireMapped;
+
+#[WireMapped]
 class Position
 {
     public function __construct(

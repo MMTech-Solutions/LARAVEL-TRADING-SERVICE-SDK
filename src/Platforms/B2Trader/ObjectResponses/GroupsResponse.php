@@ -2,14 +2,15 @@
 
 namespace Mmt\TradingServiceSdk\Platforms\B2Trader\ObjectResponses;
 
-use Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\GroupInfo;
+use Mmt\TradingServiceSdk\WireHydration\Attributes\WireMapped;
 
+#[WireMapped]
 class GroupsResponse
 {
     public function __construct(
         public readonly string $default_account_group_id,
         public readonly string $default_account_group_name,
-        /** @var GroupInfo[] */
+        /** @var \Mmt\TradingServiceSdk\Platforms\B2Trader\DTOs\GroupInfo[] */
         public readonly array $account_groups,
     ) {}
 }
