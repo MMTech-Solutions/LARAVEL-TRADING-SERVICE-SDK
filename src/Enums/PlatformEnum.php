@@ -9,13 +9,15 @@ enum PlatformEnum: int
 {
     case MT5 = 1;
     case B2T = 2;
+    case CT  = 3;
 
     public static function tryFromString(string $platform): self
     {
         return match (strtolower($platform)) {
-            'mt5' => self::MT5,
-            'b2t' => self::B2T,
-            default => throw new PlatformNotSupportedException(),
+            'mt5'            => self::MT5,
+            'b2t'            => self::B2T,
+            'ct', 'ctrader'  => self::CT,
+            default          => throw new PlatformNotSupportedException(),
         };
     }
 

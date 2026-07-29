@@ -5,6 +5,8 @@ namespace Mmt\TradingServiceSdk;
 use Illuminate\Support\ServiceProvider;
 use Mmt\TradingServiceSdk\Platforms\B2Trader\B2TTradingService;
 use Mmt\TradingServiceSdk\Platforms\B2Trader\Contracts\B2TTradingServiceInterface;
+use Mmt\TradingServiceSdk\Platforms\CTrader\Contracts\CTraderTradingService;
+use Mmt\TradingServiceSdk\Platforms\CTrader\Contracts\CTraderTradingServiceInterface;
 use Mmt\TradingServiceSdk\Platforms\MT5\Contracts\MT5TradingService;
 use Mmt\TradingServiceSdk\Platforms\MT5\Contracts\MT5TradingServiceInterface;
 use Mmt\TradingServiceSdk\Platforms\TradingService;
@@ -23,6 +25,7 @@ class TradingServiceSdkServiceProvider extends ServiceProvider
         $this->app->singleton(TransportInterface::class, TradingServiceHttpClient::class);
         $this->app->bind(MT5TradingServiceInterface::class, MT5TradingService::class);
         $this->app->bind(B2TTradingServiceInterface::class, B2TTradingService::class);
+        $this->app->bind(CTraderTradingServiceInterface::class, CTraderTradingService::class);
         $this->app->singleton(TradingService::class);
     }
 
