@@ -3,6 +3,7 @@
 namespace Mmt\TradingServiceSdk\Session;
 
 use Mmt\TradingServiceSdk\Platforms\B2Trader\Contracts\B2TTradingServiceInterface;
+use Mmt\TradingServiceSdk\Platforms\CTrader\Contracts\CTraderTradingServiceInterface;
 use Mmt\TradingServiceSdk\Platforms\MT5\Contracts\MT5TradingServiceInterface;
 use Override;
 
@@ -25,6 +26,15 @@ class BrokerSession implements BrokerSessionInterface
     {
         return resolve(
             B2TTradingServiceInterface::class,
+            ['connectionId' => $this->connectionId]
+        );
+    }
+
+    #[Override]
+    public function ctrader(): CTraderTradingServiceInterface
+    {
+        return resolve(
+            CTraderTradingServiceInterface::class,
             ['connectionId' => $this->connectionId]
         );
     }
