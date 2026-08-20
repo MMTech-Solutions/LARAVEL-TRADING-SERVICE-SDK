@@ -8,13 +8,17 @@ use Mmt\TradingServiceSdk\WireHydration\Attributes\WireMapped;
 final class Account
 {
     public function __construct(
-        public readonly string $login,
+        /** Created trading account id (B2T account id). */
+        public readonly string $account_id,
+        /** Owner Keycloak user UUID. */
         public readonly string $user_id,
+        /** Account group UUID. */
         public readonly string $group_id,
+        /** Account display name. */
         public readonly string $name,
+        /** Account type (e.g. Hedging). */
         public readonly string $type,
-        public readonly string $balance,
-        public readonly float $equity,
-        public readonly string $currency,
+        /** Public account id when assigned by B2T (may be numeric). */
+        public readonly ?string $public_account_id = null,
     ) {}
 }

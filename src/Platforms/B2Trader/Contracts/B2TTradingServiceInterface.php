@@ -180,17 +180,24 @@ interface B2TTradingServiceInterface
     #region Cash ops
 
         /**
-         * B2Trader deposit or withdrawal via Transfers API.
-         * Positive amount -> deposits;
-         * Negative amount -> withdraws.
-         * Withdrawals are **auto-confirmed** when transfer status is `AwaitingConfirmation`
-         * 
+         * Relative balance adjustment via POST /transactions/change.
+         *
+         * type=BALANCE (default): deposit/withdrawal via Transfers API.
+         * Positive amount -> deposits; negative amount -> withdraws.
+         * Withdrawals are **auto-confirmed** when transfer status is `AwaitingConfirmation`.
+         *
+         * type=CREDIT with bucket="CREDIT": native grant/revoke (not deposit/withdraw).
+         * Positive amount -> grant; negative amount -> revoke.
+         *
          * @param TransactionCommand $command
          * @return ActionResultInterface<AddBalanceResponse>
          */
         public function addBalance(CommandInterface $command): ActionResultInterface;
 
         /**
+         * Absolute balance set via POST /transactions/set.
+         * Same TransactionCommand shape as addBalance (type/bucket/idempotency_key).
+         *
          * @param TransactionCommand $command
          * @return ActionResultInterface<SetBalanceResponse>
          */

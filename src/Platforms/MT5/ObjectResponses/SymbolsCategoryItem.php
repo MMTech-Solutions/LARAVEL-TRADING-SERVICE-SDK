@@ -11,5 +11,7 @@ final class SymbolsCategoryItem
         public readonly string $category,
         /** @var SymbolItem[] */
         public readonly array $symbols,
+        /** @var SymbolsCategoryItem[] */
+        public readonly array $categories,
     ) {}
 }

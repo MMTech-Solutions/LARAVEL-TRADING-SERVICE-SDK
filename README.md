@@ -2,9 +2,9 @@
 
 Cliente PHP (**SDK**) para Laravel que integra aplicaciones con el **MMT Trading Service**: operaciones de administración de brokers y de plataformas de trading (MT5, B2Trader y futuras) mediante una API tipada, sin acoplar el dominio de la aplicación a detalles HTTP.
 
-**Versión estable:** `3.1.0.0` (etiqueta Git `v3.1.0.0`). Release anterior: `v3.0.0.0`.
+**Versión estable:** `4.0.0.0` (etiqueta Git `v4.0.0.0`). Release anterior: `v3.3.0.0`.
 
-> **⚠ Breaking changes en v3.0.0.0** — La configuración de conexión B2Trader incorpora el contrato completo de DSS y Kafka. Ver [Migración desde v2.x](#migración-desde-v2x).
+> **⚠ Breaking changes en v3.0.0.0** — La configuración de conexión B2Trader incorpora el contrato completo de Kafka. Ver [Migración desde v2.x](#migración-desde-v2x).
 
 ## Propósito
 
@@ -89,7 +89,6 @@ $session = $trading->connect(
         bbp_client_secret: 'client-secret',
         history_base_url: 'https://bbp-ts-api.example.com',
         default_transfer_asset_id: 'usd',
-        dss_ws_base_url: 'wss://bbp-dss-api.example.com',
         kafka_bootstrap_servers: 'kafka.example.com:9092',
         kafka_security_protocol: 'SASL_SSL',
         kafka_sasl_mechanism: 'PLAIN',
@@ -218,9 +217,8 @@ src/
 
 ### Nuevo contrato de conexión B2Trader
 
-`B2TConnectCommand` exige ahora la configuración completa utilizada por B2Trader para DSS y Kafka. Este cambio rompe las llamadas existentes al constructor y requiere añadir los siguientes argumentos:
+`B2TConnectCommand` exige ahora la configuración completa utilizada por B2Trader para Kafka. Este cambio rompe las llamadas existentes al constructor y requiere añadir los siguientes argumentos:
 
-- `dss_ws_base_url`
 - `kafka_bootstrap_servers`
 - `kafka_security_protocol`
 - `kafka_sasl_mechanism`
@@ -281,10 +279,13 @@ Este repositorio usa etiquetas Git para releases públicas:
 | `v1.2.1.0` | Menor: ajustes en MT5, `BrokerConnectionResponse` con campo `platform`. |
 | `v2.0.0.0` | **Breaking:** soporte B2Trader, `ConnectCommandInterface`, comandos de conexión por plataforma (`MT5ConnectCommand`, `B2TConnectCommand`), `BrokerSession::b2t()`, `PlatformEnum::B2T`. Eliminado `ConnectBrokerCommand`. |
 | `v2.1.0.0` | Menor: `getUserByEmail` B2Trader y ajustes menores. |
-| `v2.2.0.0` | **Breaking (B2T connect):** `B2TConnectCommand` payload alineado con Trading Service — eliminados `frontoffice_*` y `kafka_*`; añadido `dss_ws_base_url`; `keycloak_url`, `bbp_client_id`, `bbp_client_secret` requeridos; `fromArray()` añadido. |
+| `v2.2.0.0` | **Breaking (B2T connect):** `B2TConnectCommand` payload alineado con Trading Service — eliminados `frontoffice_*` y `kafka_*`; `keycloak_url`, `bbp_client_id`, `bbp_client_secret` requeridos; `fromArray()` añadido. |
 | `v2.3.0.0` | Menor: B2T `setAccountAccess` (`POST accounts/access`), `getAccountAccess` (`GET accounts/{login}/access`), `SetAccountAccessCommand`, DTO `AccountAccessData`. El endpoint legacy `setUserAccess` (`POST users/access`) se mantiene. |
-| `v3.0.0.0` | **Breaking (B2T connect):** contrato completo DSS/Kafka; se añaden parámetros Kafka obligatorios y se renombran las claves de topic y consumer group según el payload real de B2Trader. |
+| `v3.0.0.0` | **Breaking (B2T connect):** contrato completo Kafka; se añaden parámetros Kafka obligatorios y se renombran las claves de topic y consumer group según el payload real de B2Trader. |
 | `v3.1.0.0` | Menor: depreca `getData` a favor de `getMappedData`; `#[WireMapped]` en ObjectResponses anidados; fix de `WireHydrator` para `@var string[]` y primitivos; `.gitignore` con `/vendor/`. |
+| `v3.2.0.0` | Menor: soporte para la plataforma CTrader. |
+| `v3.3.0.0` | Fix: añade el acceso `ctrader()` a `BrokerSession`. |
+| `v4.0.0.0` | **Breaking:** alinea contratos B2Trader, elimina `dss_ws_base_url`, añade operaciones de balance/crédito y actualiza DTOs; incorpora hidratación recursiva de categorías de símbolos MT5. |
 
 En la aplicación consumidora fija la dependencia a la etiqueta concreta (p. ej. `2.0.0.0`) o al criterio semver que uses internamente.
 

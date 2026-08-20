@@ -8,7 +8,7 @@ use Override;
 final class GetGroupsCommand implements CommandInterface
 {
     public function __construct(
-        public readonly string $user_id,
+        public readonly ?string $user_id,
         public readonly ?int $limit = null,
         public readonly ?int $offset = null,
     ) {}
