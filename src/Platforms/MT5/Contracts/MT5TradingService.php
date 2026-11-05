@@ -349,6 +349,13 @@ class MT5TradingService implements MT5TradingServiceInterface
         return $this->sendPacket('post', $this->url.'/'.$this->connectionId.'/users/expert-advisor', $command->toArray());
     }
 
+    public function getUserExpertAdvisor(string $login): ActionResultInterface
+    {
+        $url = $this->url.'/'.$this->connectionId.'/users/'.$this->encodePathSegment($login).'/expert-advisor';
+
+        return $this->sendPacket('get', $url);
+    }
+
     public function changeBalance(CommandInterface $command): ActionResultInterface
     {
         if (! $command instanceof TransactionCommand) {

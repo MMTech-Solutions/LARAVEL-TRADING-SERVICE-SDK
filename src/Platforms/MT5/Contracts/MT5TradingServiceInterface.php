@@ -28,6 +28,7 @@ use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\AccountStateItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\CloseAllPositionItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\CloseAllTradingItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\DealItem;
+use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\ExpertAdvisorItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\GroupItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\HierarchyGroupItem;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\MarginLevelItem;
@@ -245,6 +246,13 @@ interface MT5TradingServiceInterface
      * @return ActionResultInterface<null>
      */
     public function setUserExpertAdvisor(CommandInterface $command): ActionResultInterface;
+
+    /**
+     * Whether Expert Advisor trading (USER_RIGHT_EXPERT) is enabled for a login.
+     *
+     * @return ActionResultInterface<ExpertAdvisorItem>
+     */
+    public function getUserExpertAdvisor(string $login): ActionResultInterface;
 
     /**
      * @param  TransactionCommand  $command
