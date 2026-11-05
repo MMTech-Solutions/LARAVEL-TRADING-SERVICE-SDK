@@ -21,6 +21,7 @@ use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ListUsersCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\ModifyPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\OpenPositionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserAccessCommand;
+use Mmt\TradingServiceSdk\Platforms\MT5\Commands\SetUserExpertAdvisorCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\TransactionCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\Commands\UpdateUserCommand;
 use Mmt\TradingServiceSdk\Platforms\MT5\ObjectResponses\AccountStateItem;
@@ -236,6 +237,14 @@ interface MT5TradingServiceInterface
      * @return ActionResultInterface<null>
      */
     public function setUserAccess(CommandInterface $command): ActionResultInterface;
+
+    /**
+     * Enable or disable Expert Advisors for a trading account login.
+     *
+     * @param  SetUserExpertAdvisorCommand  $command
+     * @return ActionResultInterface<null>
+     */
+    public function setUserExpertAdvisor(CommandInterface $command): ActionResultInterface;
 
     /**
      * @param  TransactionCommand  $command

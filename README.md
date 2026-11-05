@@ -2,7 +2,7 @@
 
 Cliente PHP (**SDK**) para Laravel que integra aplicaciones con el **MMT Trading Service**: operaciones de administración de brokers y de plataformas de trading (MT5, B2Trader y futuras) mediante una API tipada, sin acoplar el dominio de la aplicación a detalles HTTP.
 
-**Versión estable:** `4.0.0.0` (etiqueta Git `v4.0.0.0`). Release anterior: `v3.3.0.0`.
+**Versión estable:** `4.1.0.0` (etiqueta Git `v4.1.0.0`). Release anterior: `v4.0.0.0`.
 
 > **⚠ Breaking changes en v3.0.0.0** — La configuración de conexión B2Trader incorpora el contrato completo de Kafka. Ver [Migración desde v2.x](#migración-desde-v2x).
 
@@ -286,6 +286,7 @@ Este repositorio usa etiquetas Git para releases públicas:
 | `v3.2.0.0` | Menor: soporte para la plataforma CTrader. |
 | `v3.3.0.0` | Fix: añade el acceso `ctrader()` a `BrokerSession`. |
 | `v4.0.0.0` | **Breaking:** alinea contratos B2Trader, elimina `dss_ws_base_url`, añade operaciones de balance/crédito y actualiza DTOs; incorpora hidratación recursiva de categorías de símbolos MT5. |
+| `v4.1.0.0` | Menor: MT5 `setUserExpertAdvisor` (`POST users/expert-advisor`), `SetUserExpertAdvisorCommand` (`login`, `enabled`). |
 
 En la aplicación consumidora fija la dependencia a la etiqueta concreta (p. ej. `2.0.0.0`) o al criterio semver que uses internamente.
 
